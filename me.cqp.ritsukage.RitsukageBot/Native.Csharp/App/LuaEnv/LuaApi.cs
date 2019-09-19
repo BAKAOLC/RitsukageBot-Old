@@ -421,6 +421,19 @@ namespace Native.Csharp.App.LuaEnv
         //获取当前登录QQ的昵称
         public static string GetAppDirectory() => Common.AppDirectory;
         //取应用目录
+        public static NLua.LuaTable GetQQInfo(NLua.LuaTable t, long q, bool a)
+        {
+            // 当地时区
+            System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));
+
+			Sdk.Cqp.Model.QQ m;
+            Common.CqApi.GetQQInfo(q, out m, a);
+            t["Age"] = m.Age;
+            t["Nick"] = m.Nick;
+            t["Sex"] = (int)m.Sex;
+            return t;
+        }
+        //获取QQ信息
         public static NLua.LuaTable GetMemberInfo(NLua.LuaTable t, long g, long q, bool a)
         {
             // 当地时区
