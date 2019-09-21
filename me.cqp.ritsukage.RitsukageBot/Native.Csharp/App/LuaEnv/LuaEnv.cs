@@ -7,21 +7,23 @@ using NLua;
 
 namespace Native.Csharp.App.LuaEnv {
     class LuaEnv {
-        private static Lua luaField;
+        private static volatile Lua luaField;
         private static readonly object luaLock = new object();
 
         public static Lua Lua {
             get {
-                lock (luaLock) {
-                    if (luaField == null) {
-                        luaField = new Lua();
-                        luaField.State.Encoding = Encoding.UTF8;
-                        luaField.LoadCLRPackage();
-                        luaField["handled"] = false; //处理标志
-                        Initial(luaField);
+                if (luaField == null) {
+                    lock (luaLock) {
+                        if (luaField == null) {
+                            luaField = new Lua();
+                            luaField.State.Encoding = Encoding.UTF8;
+                            luaField.LoadCLRPackage();
+                            luaField["handled"] = false; //处理标志
+                            Initial(luaField);
+                        }
                     }
-                    return luaField;
                 }
+                return luaField;
             }
         }
 
@@ -208,13 +210,13 @@ namespace Native.Csharp.App.LuaEnv {
 
 
             ////// sand box Function (from SandBox Method)
-            try {
-                lua.RegisterFunction("apiGetPath", null, typeof(LuaApi).GetMethod("GetPath"));
-                //获取程序运行目录
-                lua.RegisterFunction("apiGetAsciiHex", null, typeof(LuaApi).GetMethod("GetAsciiHex"));
-            } catch (Exception e) {
-                Common.CqApi.AddLoger(LogerLevel.Error, "lua注册SandBox错误", e.ToString());
-            }
+//            try {
+//                lua.RegisterFunction("apiGetPath", null, typeof(LuaApi).GetMethod("GetPath"));
+//                //获取程序运行目录
+//                lua.RegisterFunction("apiGetAsciiHex", null, typeof(LuaApi).GetMethod("GetAsciiHex"));
+//            } catch (Exception e) {
+//                Common.CqApi.AddLoger(LogerLevel.Error, "lua注册SandBox错误", e.ToString());
+//            }
         }
 
 
@@ -227,8 +229,8 @@ namespace Native.Csharp.App.LuaEnv {
             //还没下载lua脚本，先不响应消息
             if (!File.Exists(Common.AppDirectory + "lua/require/head.lua")) return false;
 
-            var lua = Lua;
             lock (luaLock) {
+                var lua = Lua;
                 try {
                     //maybe.... only once? by yys
 //                    lua.State.Encoding = Encoding.UTF8;
@@ -255,22 +257,23 @@ namespace Native.Csharp.App.LuaEnv {
         /// <param name="code"></param>
         /// <returns></returns>
         public static string RunSandBox(string code) {
-            var lua = Lua;
-            lock (luaLock) {
-                try {
-                    //函数干脆一起注册了 部分也在new的时候操作了 by:yys
-//                    lua.State.Encoding = Encoding.UTF8;
-//                    lua.RegisterFunction("apiGetPath", null, typeof(LuaApi).GetMethod("GetPath"));
-//                    //获取程序运行目录
-//                    lua.RegisterFunction("apiGetAsciiHex", null, typeof(LuaApi).GetMethod("GetAsciiHex"));
-                    //获取字符串ascii编码的hex串
-                    lua["lua_run_result_var"] = ""; //返回值所在的变量
-                    lua.DoFile(Common.AppDirectory + "lua/require/sandbox/head.lua");
-                    lua.DoString(code);
-                    return lua["lua_run_result_var"].ToString();
-                } catch (Exception e) {
-                    Common.CqApi.AddLoger(LogerLevel.Error, "沙盒lua脚本错误", e.ToString());
-                    return "运行错误：" + e;
+            using (var lua = new Lua()) {
+                lock (luaLock) {
+                    try {
+                        //函数干脆一起注册了 部分也在new的时候操作了 by:yys canceled by:yys
+                        lua.State.Encoding = Encoding.UTF8;
+                        lua.RegisterFunction("apiGetPath", null, typeof(LuaApi).GetMethod("GetPath"));
+                        //获取程序运行目录
+                        lua.RegisterFunction("apiGetAsciiHex", null, typeof(LuaApi).GetMethod("GetAsciiHex"));
+                        //获取字符串ascii编码的hex串
+                        lua["lua_run_result_var"] = ""; //返回值所在的变量
+                        lua.DoFile(Common.AppDirectory + "lua/require/sandbox/head.lua");
+                        lua.DoString(code);
+                        return lua["lua_run_result_var"].ToString();
+                    } catch (Exception e) {
+                        Common.CqApi.AddLoger(LogerLevel.Error, "沙盒lua脚本错误", e.ToString());
+                        return "运行错误：" + e;
+                    }
                 }
             }
         }
