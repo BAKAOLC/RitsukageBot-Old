@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Native.Csharp.App.Model;
+﻿using Native.Csharp.App.Model;
 
 namespace Native.Csharp.App.Interface
 {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace Native.Csharp.Sdk.Cqp.Other
@@ -11,7 +10,7 @@ namespace Native.Csharp.Sdk.Cqp.Other
 	public class Pack
 	{
 		#region --字段--
-		private readonly List<byte> _bytes = null;
+		private readonly List<byte> _bytes;
 		#endregion
 
 		#region --属性--
@@ -20,7 +19,7 @@ namespace Native.Csharp.Sdk.Cqp.Other
 		/// </summary>
 		public int Length
 		{
-			get { return this._bytes.Count; }
+			get { return _bytes.Count; }
 		}
 		#endregion
 
@@ -37,14 +36,14 @@ namespace Native.Csharp.Sdk.Cqp.Other
 		/// </summary>
 		/// <returns></returns>
 		public byte[] GetAll()
-		{ return this._bytes.ToArray(); }
+		{ return _bytes.ToArray(); }
 		/// <summary>
 		/// 置byte[] 
 		/// </summary>
 		/// <param name="arr"></param>
 		public void SetBin(byte[] arr)
 		{
-			this._bytes.AddRange(arr);
+			_bytes.AddRange(arr);
 		}
 		/// <summary>
 		/// 置字节
@@ -52,7 +51,7 @@ namespace Native.Csharp.Sdk.Cqp.Other
 		/// <param name="value"></param>
 		public void SetByte(byte value)
 		{
-			this._bytes.Add(value);
+			_bytes.Add(value);
 		}
 		/// <summary>
 		/// 置类数据
@@ -60,8 +59,8 @@ namespace Native.Csharp.Sdk.Cqp.Other
 		/// <param name="data"></param>
 		public void SetData(byte[] data)
 		{
-			this._bytes.Clear();
-			this._bytes.AddRange(data);
+			_bytes.Clear();
+			_bytes.AddRange(data);
 
 		}
 		/// <summary>
@@ -70,7 +69,7 @@ namespace Native.Csharp.Sdk.Cqp.Other
 		/// <param name="value"></param>
 		public void SetInt16(short value)
 		{
-			this._bytes.AddRange(BitConverter.GetBytes(value));
+			_bytes.AddRange(BitConverter.GetBytes(value));
 		}
 		/// <summary>
 		/// 置Int32值
@@ -78,7 +77,7 @@ namespace Native.Csharp.Sdk.Cqp.Other
 		/// <param name="value"></param>
 		public void SetInt32(int value)
 		{
-			this._bytes.AddRange(BitConverter.GetBytes(value));
+			_bytes.AddRange(BitConverter.GetBytes(value));
 		}
 		/// <summary>
 		/// 置Int64值
@@ -86,7 +85,7 @@ namespace Native.Csharp.Sdk.Cqp.Other
 		/// <param name="value"></param>
 		public void SetInt64(long value)
 		{
-			this._bytes.AddRange(BitConverter.GetBytes(value));
+			_bytes.AddRange(BitConverter.GetBytes(value));
 		}
 		/// <summary>
 		/// 置字符串
@@ -99,7 +98,7 @@ namespace Native.Csharp.Sdk.Cqp.Other
 			{
 				decode = Encoding.Default;
 			}
-			this._bytes.AddRange(decode.GetBytes(str));
+			_bytes.AddRange(decode.GetBytes(str));
 		}
 		/// <summary>
 		/// 置令牌字符串

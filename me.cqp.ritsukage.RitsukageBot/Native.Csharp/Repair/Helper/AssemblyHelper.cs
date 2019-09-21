@@ -5,11 +5,9 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using Native.Csharp.Repair.Core;
 using Native.Csharp.Repair.Enum;
 
@@ -120,7 +118,7 @@ namespace Native.Csharp.Repair.Helper
 				}
 
 				//若非内嵌组件(即非托管或可执行文件)，尝试以原有重定向方法解析。
-				embeddedAssembly = ReflectionHelper.InvokeMethod<Assembly> (typeLoader, null, "ResolveAssembly", new object[] { sender, args });
+				embeddedAssembly = ReflectionHelper.InvokeMethod<Assembly> (typeLoader, null, "ResolveAssembly", sender, args);
 				if (embeddedAssembly != null)
 				{
 					if (embeddedAssembly.FullName.CompareTo (args.Name) == 0)

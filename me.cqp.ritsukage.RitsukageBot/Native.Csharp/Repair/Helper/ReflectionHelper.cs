@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Native.Csharp.Repair
 {
@@ -25,7 +22,7 @@ namespace Native.Csharp.Repair
 			{
 				return (T)method.Invoke (instance, args);
 			}
-			return default (T);
+			return default;
 		}
 
 		public static T InvokeMethod<T> (this T obj, string methodName, params object[] args)
@@ -36,7 +33,7 @@ namespace Native.Csharp.Repair
 			{
 				return (T)method.Invoke (obj, args);
 			}
-			return default (T);
+			return default;
 		}
 
 		public static MethodInfo GetMethod (Type type, string methodName)

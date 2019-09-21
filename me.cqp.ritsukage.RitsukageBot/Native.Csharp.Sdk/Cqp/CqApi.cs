@@ -1,21 +1,19 @@
-﻿using Native.Csharp.Sdk.Cqp.Core;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Native.Csharp.Sdk.Cqp.Core;
 using Native.Csharp.Sdk.Cqp.Enum;
 using Native.Csharp.Sdk.Cqp.Model;
 using Native.Csharp.Sdk.Cqp.Other;
 using Native.Csharp.Tool;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 
 namespace Native.Csharp.Sdk.Cqp
 {
 	public class CqApi
 	{
 		#region --字段--
-		private int _authCode = 0;
-		private string _appDirCache = null;
+		private int _authCode;
+		private string _appDirCache;
 		#endregion
 
 		#region --属性--
@@ -32,7 +30,7 @@ namespace Native.Csharp.Sdk.Cqp
 		/// <param name="authCode">插件验证码</param>
 		public CqApi (int authCode)
 		{
-			this._authCode = authCode;
+			_authCode = authCode;
 		}
 		#endregion
 
@@ -129,7 +127,7 @@ namespace Native.Csharp.Sdk.Cqp
 			{
 				@string.AppendFormat (",image={0}", CqCode_Trope (imgUrl, true));
 			}
-			return string.Format ("[CQ:share{0}]", @string.ToString ());
+			return string.Format ("[CQ:share{0}]", @string);
 		}
 		/// <summary>
 		/// 获取酷Q "名片分享" 代码
@@ -156,7 +154,7 @@ namespace Native.Csharp.Sdk.Cqp
 			@string.AppendFormat (",lat={0},lon={1}", lat, lon);
 			@string.AppendFormat (",zoom={0}", zoom);
 			@string.AppendFormat (",title={0},content={1}", CqCode_Trope (site, true), CqCode_Trope (detail, true));
-			return string.Format ("[CQ:location{0}]", @string.ToString ());
+			return string.Format ("[CQ:location{0}]", @string);
 		}
 		/// <summary>
 		/// 获取酷Q "匿名" 代码
@@ -215,7 +213,7 @@ namespace Native.Csharp.Sdk.Cqp
 			{
 				@string.AppendFormat (",image={0}", CqCode_Trope (imgUrl, true));
 			}
-			return string.Format ("[CQ:music,type=custom{0}]", @string.ToString ());
+			return string.Format ("[CQ:music,type=custom{0}]", @string);
 		}
 		/// <summary>
 		/// 获取酷Q "语音" 代码

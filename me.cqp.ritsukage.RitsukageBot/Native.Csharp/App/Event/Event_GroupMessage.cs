@@ -1,12 +1,6 @@
-﻿using Native.Csharp.Sdk.Cqp;
-using Native.Csharp.Sdk.Cqp.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Native.Csharp.App.Model;
+﻿using System.Collections;
 using Native.Csharp.App.Interface;
-using System.Collections;
+using Native.Csharp.App.Model;
 
 namespace Native.Csharp.App.Event
 {
@@ -26,12 +20,12 @@ namespace Native.Csharp.App.Event
             e.Handled = LuaEnv.LuaEnv.RunLua(
                 "",
                 "envent/ReceiveGroupMessage.lua",
-                new ArrayList() {
+                new ArrayList {
                     "fromqq", e.FromQQ,
                     "fromgroup",e.FromGroup,
                     "message",e.Msg,
                     "id",e.MsgId,
-                    "fromAnonymous",e.IsAnonymousMsg,
+                    "fromAnonymous",e.IsAnonymousMsg
                 });
 
 		}
@@ -49,10 +43,10 @@ namespace Native.Csharp.App.Event
             e.Handled = LuaEnv.LuaEnv.RunLua(
                 "",
                 "envent/ReceivePrivateMessage.lua",
-                new ArrayList() {
+                new ArrayList {
                     "fromqq", e.FromQQ,
                     "message",e.Msg,
-                    "id",e.MsgId,
+                    "id",e.MsgId
                 });
 
             //e.Handled = false;  // 关于返回说明, 请参见 "Event_FriendMessage.ReceiveFriendMessage" 方法
@@ -73,12 +67,12 @@ namespace Native.Csharp.App.Event
             e.Handled = LuaEnv.LuaEnv.RunLua(
                 "",
                 "envent/ReceiveGroupFileUpload.lua",
-                new ArrayList() {
+                new ArrayList {
                     "fromqq", e.FromQQ,
                     "fromgroup",e.FromGroup,
                     "fileName",e.File.Name,
                     "id",e.File.Id,
-                    "size",e.File.Size,
+                    "size",e.File.Size
                 });
 
             //e.Handled = false;   // 关于返回说明, 请参见 "Event_FriendMessage.ReceiveFriendMessage" 方法
@@ -97,10 +91,10 @@ namespace Native.Csharp.App.Event
             e.Handled = LuaEnv.LuaEnv.RunLua(
                 "",
                 "envent/ReceiveGroupManage.lua",
-                new ArrayList() {
+                new ArrayList {
                     "fromqq", e.BeingOperateQQ,
                     "fromgroup",e.FromGroup,
-                    "manager",true,
+                    "manager",true
                 });
 
             //e.Handled = false;  // 关于返回说明, 请参见 "Event_FriendMessage.ReceiveFriendMessage" 方法
@@ -119,10 +113,10 @@ namespace Native.Csharp.App.Event
             e.Handled = LuaEnv.LuaEnv.RunLua(
                 "",
                 "envent/ReceiveGroupManage.lua",
-                new ArrayList() {
+                new ArrayList {
                     "fromqq", e.BeingOperateQQ,
                     "fromgroup",e.FromGroup,
-                    "manager",false,
+                    "manager",false
                 });
 
             //e.Handled = false;  // 关于返回说明, 请参见 "Event_FriendMessage.ReceiveFriendMessage" 方法
@@ -141,9 +135,9 @@ namespace Native.Csharp.App.Event
             e.Handled = LuaEnv.LuaEnv.RunLua(
                 "",
                 "envent/ReceiveGroupMemberJoin.lua",
-                new ArrayList() {
+                new ArrayList {
                     "fromqq", e.BeingOperateQQ,
-                    "fromgroup",e.FromGroup,
+                    "fromgroup",e.FromGroup
                 });
             
             //e.Handled = false;  // 关于返回说明, 请参见 "Event_FriendMessage.ReceiveFriendMessage" 方法
@@ -162,9 +156,9 @@ namespace Native.Csharp.App.Event
             e.Handled = LuaEnv.LuaEnv.RunLua(
                 "",
                 "envent/ReceiveGroupMemberJoin.lua",
-                new ArrayList() {
+                new ArrayList {
                     "fromqq", e.BeingOperateQQ,
-                    "fromgroup",e.FromGroup,
+                    "fromgroup",e.FromGroup
                 });
             
             //e.Handled = false;  // 关于返回说明, 请参见 "Event_FriendMessage.ReceiveFriendMessage" 方法
@@ -183,9 +177,9 @@ namespace Native.Csharp.App.Event
             e.Handled = LuaEnv.LuaEnv.RunLua(
                 "",
                 "envent/ReceiveGroupMemberLeave.lua",
-                new ArrayList() {
+                new ArrayList {
                     "fromqq", e.BeingOperateQQ,
-                    "fromgroup",e.FromGroup,
+                    "fromgroup",e.FromGroup
                 });
             
             //e.Handled = false;  // 关于返回说明, 请参见 "Event_FriendMessage.ReceiveFriendMessage" 方法
@@ -204,10 +198,10 @@ namespace Native.Csharp.App.Event
             e.Handled = LuaEnv.LuaEnv.RunLua(
                 "",
                 "envent/ReceiveGroupMemberLeave.lua",
-                new ArrayList() {
+                new ArrayList {
                     "fromqq", e.BeingOperateQQ,
                     "fromgroup",e.FromGroup,
-                    "doqq",e.FromQQ,
+                    "doqq",e.FromQQ
                 });
 
             //e.Handled = false;  // 关于返回说明, 请参见 "Event_FriendMessage.ReceiveFriendMessage" 方法
@@ -226,11 +220,11 @@ namespace Native.Csharp.App.Event
             e.Handled = LuaEnv.LuaEnv.RunLua(
                 "",
                 "envent/ReceiveGroupAddApply.lua",
-                new ArrayList() {
+                new ArrayList {
                     "fromqq", e.FromQQ,
                     "message",e.AppendMsg,
                     "tag",e.Tag,
-                    "fromgroup",e.FromGroup,
+                    "fromgroup",e.FromGroup
                 });
 
             //e.Handled = false;  // 关于返回说明, 请参见 "Event_FriendMessage.ReceiveFriendMessage" 方法
@@ -249,11 +243,11 @@ namespace Native.Csharp.App.Event
             e.Handled = LuaEnv.LuaEnv.RunLua(
                 "",
                 "envent/ReceiveGroupAddInvitee.lua",
-                new ArrayList() {
+                new ArrayList {
                     "fromqq", e.FromQQ,
                     "message",e.AppendMsg,
                     "tag",e.Tag,
-                    "fromgroup",e.FromGroup,
+                    "fromgroup",e.FromGroup
                 });
 
             //e.Handled = false;  // 关于返回说明, 请参见 "Event_FriendMessage.ReceiveFriendMessage" 方法

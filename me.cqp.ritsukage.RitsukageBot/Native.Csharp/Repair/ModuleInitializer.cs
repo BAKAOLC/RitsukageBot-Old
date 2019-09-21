@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using Native.Csharp.Repair;
 using Native.Csharp.Repair.Helper;
 
 namespace Native.Csharp.Repair

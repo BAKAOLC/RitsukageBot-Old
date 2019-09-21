@@ -1,16 +1,15 @@
-﻿using LibGit2Sharp;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Timers;
+using LibGit2Sharp;
+using Native.Csharp.Sdk.Cqp.Enum;
 
 namespace Native.Csharp.App.LuaEnv
 {
     class TimerRun
     {
-        private static bool start = false;
+        private static bool start;
         public static int luaWait = 60;//间隔多少秒执行一次
         private static uint count = 60;
         public static void TimerStart()
@@ -18,20 +17,20 @@ namespace Native.Csharp.App.LuaEnv
             if (start)
                 return;
             start = true;
-            System.Timers.Timer timer = new System.Timers.Timer();
+            Timer timer = new Timer();
             timer.Enabled = true;
             timer.Interval = 1000;//1s
-            timer.Elapsed += new System.Timers.ElapsedEventHandler(Timer1_Elapsed);
+            timer.Elapsed += Timer1_Elapsed;
             timer.Start();
 
-            System.Timers.Timer timer2 = new System.Timers.Timer();
+            Timer timer2 = new Timer();
             timer2.Enabled = true;
             timer2.Interval = 60000;//1m
-            timer2.Elapsed += new System.Timers.ElapsedEventHandler(Timer2_Elapsed);
+            timer2.Elapsed += Timer2_Elapsed;
             timer2.Start();
         }
 
-        public static void Timer1_Elapsed(object sender, System.Timers.ElapsedEventArgs e)  //1s定时程序
+        public static void Timer1_Elapsed(object sender, ElapsedEventArgs e)  //1s定时程序
         {
             // 得到 hour minute second  如果等于某个值就开始执行某个程序。  
             int intHour = e.SignalTime.Hour;
@@ -52,11 +51,11 @@ namespace Native.Csharp.App.LuaEnv
                 if (XmlApi.xml_get("settings", "autoUpdate").ToUpper() != "TRUE")
                     return;
 
-                Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Info,"lua脚本更新检查", "正在检查脚本更新");
+                Common.CqApi.AddLoger(LogerLevel.Info,"lua脚本更新检查", "正在检查脚本更新");
                 string gitPath = Common.AppDirectory + "git/";
                 if (!Repository.IsValid(gitPath))
                 {
-                    Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Error, "lua脚本更新检查", "未检测到git仓库！");
+                    Common.CqApi.AddLoger(LogerLevel.Error, "lua脚本更新检查", "未检测到git仓库！");
                     return;//工程不存在
                 }
 
@@ -65,11 +64,11 @@ namespace Native.Csharp.App.LuaEnv
                     string lastCommit = repo.Commits.First().Sha;//当前提交的特征值
 
                     // Credential information to fetch
-                    LibGit2Sharp.PullOptions options = new LibGit2Sharp.PullOptions();
+                    PullOptions options = new PullOptions();
                     options.FetchOptions = new FetchOptions();
 
                     // User information to create a merge commit
-                    var signature = new LibGit2Sharp.Signature(
+                    var signature = new Signature(
                         new Identity("MERGE_USER_NAME", "MERGE_USER_EMAIL"), DateTimeOffset.Now);
 
                     // Pull
@@ -79,29 +78,29 @@ namespace Native.Csharp.App.LuaEnv
                     }
                     catch
                     {
-                        Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Warning, "lua脚本更新检查", "代码拉取失败，请检查网络！");
+                        Common.CqApi.AddLoger(LogerLevel.Warning, "lua脚本更新检查", "代码拉取失败，请检查网络！");
                         return;
                     }
 
                     string newCommit = repo.Commits.First().Sha;//pull后的特征值
                     if(lastCommit != newCommit)
                     {
-                        Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Info, "lua脚本更新检查", "检测到更新内容，正在替换脚本\r\n" +
+                        Common.CqApi.AddLoger(LogerLevel.Info, "lua脚本更新检查", "检测到更新内容，正在替换脚本\r\n" +
                             "注意可能会出现消息报错，无视就好");
                         Directory.Delete(Common.AppDirectory + "lua", true);
                         Tools.CopyDirectory(gitPath + "appdata/lua", Common.AppDirectory + "lua");
-                        Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Info, "lua脚本更新检查", "脚本更新完成！");
+                        Common.CqApi.AddLoger(LogerLevel.Info, "lua脚本更新检查", "脚本更新完成！");
                     }
                     else
                     {
-                        Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Info, "lua脚本更新检查", "没有检测到脚本更新");
+                        Common.CqApi.AddLoger(LogerLevel.Info, "lua脚本更新检查", "没有检测到脚本更新");
                     }
                 }
 
             }
         }
 
-        public static void Timer2_Elapsed(object sender, System.Timers.ElapsedEventArgs e)  //1m定时程序
+        public static void Timer2_Elapsed(object sender, ElapsedEventArgs e)  //1m定时程序
         {
             // 得到 hour minute second  如果等于某个值就开始执行某个程序。  
             int intHour = e.SignalTime.Hour;

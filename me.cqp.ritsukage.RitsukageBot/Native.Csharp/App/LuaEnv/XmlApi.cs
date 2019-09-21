@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
 using System.Xml.Linq;
 
 namespace Native.Csharp.App.LuaEnv
@@ -34,7 +30,7 @@ namespace Native.Csharp.App.LuaEnv
         {
             dircheck(group);
             XElement root = XElement.Load(path + group + ".xml");
-            Random ran = new Random(System.DateTime.Now.Millisecond);
+            Random ran = new Random(DateTime.Now.Millisecond);
             int RandKey;
             string ansall = "";
             var element = from ee in root.Elements()
@@ -93,7 +89,7 @@ namespace Native.Csharp.App.LuaEnv
         public static void del(string group, string msg)
         {
             dircheck(group);
-            string gg = group.ToString();
+            string gg = group;
             XElement root = XElement.Load(path + group + ".xml");
 
             var element = from ee in root.Elements()
@@ -107,7 +103,7 @@ namespace Native.Csharp.App.LuaEnv
         public static void remove(string group, string msg, string ans)
         {
             dircheck(group);
-            string gg = group.ToString();
+            string gg = @group;
             XElement root = XElement.Load(path + group + ".xml");
 
             var element = from ee in root.Elements()

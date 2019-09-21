@@ -1,10 +1,6 @@
-﻿using Native.Csharp.App.Interface;
+﻿using System.Collections;
+using Native.Csharp.App.Interface;
 using Native.Csharp.App.Model;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Native.Csharp.App.Event
 {
@@ -24,11 +20,11 @@ namespace Native.Csharp.App.Event
             e.Handled = LuaEnv.LuaEnv.RunLua(
                 "",
                 "envent/ReceiveDiscussMessage.lua",
-                new ArrayList() {
+                new ArrayList {
                     "fromqq", e.FromQQ,
                     "fromDiscuss",e.FromDiscuss,
                     "message",e.Msg,
-                    "id",e.MsgId,
+                    "id",e.MsgId
                 });
 
             //e.Handled = false;   // 关于返回说明, 请参见 "Event_FriendMessage.ReceiveFriendMessage" 方法
@@ -48,10 +44,10 @@ namespace Native.Csharp.App.Event
             e.Handled = LuaEnv.LuaEnv.RunLua(
                 "",
                 "envent/ReceivePrivateMessage.lua",
-                new ArrayList() {
+                new ArrayList {
                     "fromqq", e.FromQQ,
                     "message",e.Msg,
-                    "id",e.MsgId,
+                    "id",e.MsgId
                 });
 
             //e.Handled = false;  // 关于返回说明, 请参见 "Event_FriendMessage.ReceiveFriendMessage" 方法

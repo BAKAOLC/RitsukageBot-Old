@@ -1,10 +1,9 @@
-﻿using SimpleTCP;
-using System;
+﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Native.Csharp.Sdk.Cqp.Enum;
+using SimpleTCP;
 
 namespace Native.Csharp.App.LuaEnv
 {
@@ -22,7 +21,7 @@ namespace Native.Csharp.App.LuaEnv
             {
                 server.StringEncoder = Encoding.UTF8;
                 server.Start(23333);
-                Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Info, "tcp server",
+                Common.CqApi.AddLoger(LogerLevel.Info, "tcp server",
                     "tcp server started!");
                 server.DataReceived += (sender, msg) => {
                     LuaEnv.RunLua(
@@ -32,8 +31,8 @@ namespace Native.Csharp.App.LuaEnv
             }
             catch(Exception e)
             {
-                Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Error, "tcp server", 
-                    "tcp server start failed!\r\n"+e.ToString());
+                Common.CqApi.AddLoger(LogerLevel.Error, "tcp server", 
+                    "tcp server start failed!\r\n"+e);
             }
 
             //消息发送队列
@@ -62,8 +61,8 @@ namespace Native.Csharp.App.LuaEnv
             }
             catch (Exception e)
             {
-                Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Error, "tcp server",
-                    "tcp server send failed!\r\n" + e.ToString());
+                Common.CqApi.AddLoger(LogerLevel.Error, "tcp server",
+                    "tcp server send failed!\r\n" + e);
             }
         }
     }

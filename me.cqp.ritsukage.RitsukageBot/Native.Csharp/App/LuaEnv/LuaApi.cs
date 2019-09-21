@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Drawing.Text;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Net.Security;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using Native.Csharp.Sdk.Cqp.Enum;
+using Native.Csharp.Sdk.Cqp.Model;
+using NLua;
 
 namespace Native.Csharp.App.LuaEnv
 {
@@ -47,8 +46,8 @@ namespace Native.Csharp.App.LuaEnv
             Font font = new Font(type, size);
             Color myColor = Color.FromArgb(r, g, b);
             SolidBrush myBrush = new SolidBrush(myColor);
-            pic.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-            pic.DrawString(text, font, myBrush, new PointF() { X = x, Y = y });
+            pic.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
+            pic.DrawString(text, font, myBrush, new PointF { X = x, Y = y });
             return bmp;
         }
 
@@ -153,10 +152,10 @@ namespace Native.Csharp.App.LuaEnv
                 //请求前设置一下使用的安全协议类型 System.Net
                 if (Url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
                 {
-                    ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback((object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors) =>
+                    ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, errors) =>
                     {
                         return true; //总是接受
-                    });
+                    };
                     ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
                 }
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);
@@ -169,14 +168,11 @@ namespace Native.Csharp.App.LuaEnv
                 {
                     return Tools.SaveBinaryFile(response, fileName);
                 }
-                else
-                {
-                    return false;
-                }
+                return false;
             }
             catch (Exception e)
             {
-                Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Error, "下载文件错误", e.ToString());
+                Common.CqApi.AddLoger(LogerLevel.Error, "下载文件错误", e.ToString());
             }
             return false;
         }
@@ -194,10 +190,10 @@ namespace Native.Csharp.App.LuaEnv
                 //请求前设置一下使用的安全协议类型 System.Net
                 if (Url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
                 {
-                    ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback((object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors) =>
+                    ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, errors) =>
                     {
                         return true; //总是接受
-                    });
+                    };
                     ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
                 }
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url + (postDataStr == "" ? "" : "?") + postDataStr);
@@ -225,7 +221,7 @@ namespace Native.Csharp.App.LuaEnv
             }
             catch (Exception e)
             {
-                Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Error, "get错误", e.ToString());
+                Common.CqApi.AddLoger(LogerLevel.Error, "get错误", e.ToString());
             }
             return "";
         }
@@ -241,10 +237,10 @@ namespace Native.Csharp.App.LuaEnv
                 //请求前设置一下使用的安全协议类型 System.Net
                 if (Url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
                 {
-                    ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback((object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors) =>
+                    ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, errors) =>
                     {
                         return true; //总是接受
-                    });
+                    };
                     ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
                 }
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);
@@ -272,7 +268,7 @@ namespace Native.Csharp.App.LuaEnv
             }
             catch (Exception e)
             {
-                Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Error, "post错误", e.ToString());
+                Common.CqApi.AddLoger(LogerLevel.Error, "post错误", e.ToString());
             }
             return "";
         }
@@ -288,7 +284,7 @@ namespace Native.Csharp.App.LuaEnv
             {
                 Bitmap bmp = new Bitmap(path);
                 MemoryStream ms = new MemoryStream();
-                bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                bmp.Save(ms, ImageFormat.Jpeg);
                 byte[] arr = new byte[ms.Length];
                 ms.Position = 0;
                 ms.Read(arr, 0, (int)ms.Length);
@@ -297,7 +293,7 @@ namespace Native.Csharp.App.LuaEnv
             }
             catch (Exception e)
             {
-                Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Error, "base64错误", e.ToString());
+                Common.CqApi.AddLoger(LogerLevel.Error, "base64错误", e.ToString());
             }
             return "";
         }
@@ -353,12 +349,10 @@ namespace Native.Csharp.App.LuaEnv
         /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
-        public static string GetVar(string n)
-        {
+        public static string GetVar(string n) {
             if (luaTemp.ContainsKey(n))
                 return luaTemp[n];
-            else
-                return "";
+            return "";
         }
 
         /// <summary>
@@ -381,7 +375,7 @@ namespace Native.Csharp.App.LuaEnv
         //获取酷Q "At某人" 代码
         public static string CqCode_Emoji(int id) => Common.CqApi.CqCode_Emoji(id);
         //获取酷Q "emoji表情" 代码
-        public static string CqCode_Face(int id) => Common.CqApi.CqCode_Face((Sdk.Cqp.Enum.Face)id);
+        public static string CqCode_Face(int id) => Common.CqApi.CqCode_Face((Face)id);
         //获取酷Q "表情" 代码
         public static string CqCode_Shake() => Common.CqApi.CqCode_Shake();
         //获取酷Q "窗口抖动" 代码
@@ -421,12 +415,12 @@ namespace Native.Csharp.App.LuaEnv
         //获取当前登录QQ的昵称
         public static string GetAppDirectory() => Common.AppDirectory;
         //取应用目录
-        public static NLua.LuaTable GetMemberInfo(NLua.LuaTable t, long g, long q, bool a)
+        public static LuaTable GetMemberInfo(LuaTable t, long g, long q, bool a)
         {
             // 当地时区
-            System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));
+            DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));
 
-            Sdk.Cqp.Model.GroupMember m;
+            GroupMember m;
             Common.CqApi.GetMemberInfo(g, q, out m, a);
             t["Age"] = m.Age;
             t["Area"] = m.Area;
@@ -443,15 +437,15 @@ namespace Native.Csharp.App.LuaEnv
             return t;
         }
         //获取群成员信息
-        public static int AddLoger(int level, string type, string content) => Common.CqApi.AddLoger((Sdk.Cqp.Enum.LogerLevel)level, type, content);
+        public static int AddLoger(int level, string type, string content) => Common.CqApi.AddLoger((LogerLevel)level, type, content);
         //添加日志
         public static int AddFatalError(string msg) => Common.CqApi.AddFatalError(msg);
         //添加致命错误提示
         public static int SetGroupWholeBanSpeak(long groupId, bool isOpen) => Common.CqApi.SetGroupWholeBanSpeak(groupId, isOpen);
         //置全群禁言
-        public static int SetFriendAddRequest(string tag,int respond,string msg) => Common.CqApi.SetFriendAddRequest(tag, (Sdk.Cqp.Enum.ResponseType)respond, msg);
+        public static int SetFriendAddRequest(string tag,int respond,string msg) => Common.CqApi.SetFriendAddRequest(tag, (ResponseType)respond, msg);
         //置好友添加请求
-        public static int SetGroupAddRequest(string tag, int request, int respond, string msg) => Common.CqApi.SetGroupAddRequest(tag, (Sdk.Cqp.Enum.RequestType)request, (Sdk.Cqp.Enum.ResponseType)respond, msg);
+        public static int SetGroupAddRequest(string tag, int request, int respond, string msg) => Common.CqApi.SetGroupAddRequest(tag, (RequestType)request, (ResponseType)respond, msg);
         //置群添加请求
         public static int SetGroupMemberNewCard(long groupId, long qqId, string newNick) => Common.CqApi.SetGroupMemberNewCard(groupId, qqId, newNick);
         //置群成员名片

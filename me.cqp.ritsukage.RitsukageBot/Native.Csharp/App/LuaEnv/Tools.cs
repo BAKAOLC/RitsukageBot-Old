@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
@@ -65,8 +63,7 @@ namespace Native.Csharp.App.LuaEnv
             }
             if (result != "")
                 return result.Substring(connect.Length);
-            else
-                return result;
+            return result;
         }
 
         /// <summary>
@@ -82,7 +79,7 @@ namespace Native.Csharp.App.LuaEnv
             {
                 if (File.Exists(FileName))
                     File.Delete(FileName);
-                Stream outStream = System.IO.File.Create(FileName);
+                Stream outStream = File.Create(FileName);
                 Stream inStream = response.GetResponseStream();
                 //inStream.ContentLength
                 int l;
@@ -118,13 +115,13 @@ namespace Native.Csharp.App.LuaEnv
         public static string GetRandomString(int length, bool useNum, bool useLow, bool useUpp, bool useSpe, string custom)
         {
             byte[] b = new byte[4];
-            new System.Security.Cryptography.RNGCryptoServiceProvider().GetBytes(b);
+            new RNGCryptoServiceProvider().GetBytes(b);
             Random r = new Random(BitConverter.ToInt32(b, 0));
             string s = null, str = custom;
-            if (useNum == true) { str += "0123456789"; }
-            if (useLow == true) { str += "abcdefghijklmnopqrstuvwxyz"; }
-            if (useUpp == true) { str += "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; }
-            if (useSpe == true) { str += "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"; }
+            if (useNum) { str += "0123456789"; }
+            if (useLow) { str += "abcdefghijklmnopqrstuvwxyz"; }
+            if (useUpp) { str += "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; }
+            if (useSpe) { str += "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"; }
             for (int i = 0; i < length; i++)
             {
                 s += str.Substring(r.Next(0, str.Length - 1), 1);
@@ -142,8 +139,8 @@ namespace Native.Csharp.App.LuaEnv
         {
             long freeSpace = new long();
             str_HardDiskName = str_HardDiskName + ":\\";
-            System.IO.DriveInfo[] drives = System.IO.DriveInfo.GetDrives();
-            foreach (System.IO.DriveInfo drive in drives)
+            DriveInfo[] drives = DriveInfo.GetDrives();
+            foreach (DriveInfo drive in drives)
             {
                 if (drive.Name == str_HardDiskName)
                 {

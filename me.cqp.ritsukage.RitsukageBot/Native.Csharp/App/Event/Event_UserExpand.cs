@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Native.Csharp.App.Interface;
-using Native.Csharp.Sdk.Cqp;
+using Native.Csharp.Sdk.Cqp.Enum;
 
 namespace Native.Csharp.App.Event
 {
@@ -18,8 +15,8 @@ namespace Native.Csharp.App.Event
 		public void OpenConsoleWindow (object sender, EventArgs e)
 		{
             // 本事件将会在酷Q【主线程】中被触发, 请注意线程以免卡住酷Q
-            Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Error, "提示", "请打开你的日志哦~");
-            Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Info, "lua插件提示",
+            Common.CqApi.AddLoger(LogerLevel.Error, "提示", "请打开你的日志哦~");
+            Common.CqApi.AddLoger(LogerLevel.Info, "lua插件提示",
                 "这不是错误提示哦~\r\n" +
                 "懒得给插件写窗口了，就在这里显示详细信息把\r\n" +
                 "软件使用方法/反馈/建议可以到GitHub提交哦\r\n" +

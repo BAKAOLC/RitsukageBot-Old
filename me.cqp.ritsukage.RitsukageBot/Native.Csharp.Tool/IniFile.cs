@@ -1,9 +1,8 @@
-﻿using Native.Csharp.Tool.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
+using Native.Csharp.Tool.Core;
 
 namespace Native.Csharp.Tool
 {
@@ -30,7 +29,7 @@ namespace Native.Csharp.Tool
 		/// </summary>
 		public bool IsExists
 		{
-			get { return File.Exists(this.FileName); }
+			get { return File.Exists(FileName); }
 		}
 		#endregion
 
@@ -41,10 +40,10 @@ namespace Native.Csharp.Tool
 		/// <param name="filePath">文件路径</param>
 		public IniFile(string filePath)
 		{
-			this._fileName = filePath;
+			_fileName = filePath;
 			if (!IsExists)
 			{
-				File.Create(this.FileName);
+				File.Create(FileName);
 			}
 		}
 		#endregion
@@ -60,7 +59,7 @@ namespace Native.Csharp.Tool
 		/// <param name="Value">该键的值</param>
 		public void Write(string section, string key, object Value)
 		{
-			Kernel32.WritePrivateProfileStringA(section, key, Value.ToString(), this.FileName);
+			Kernel32.WritePrivateProfileStringA(section, key, Value.ToString(), FileName);
 		}
 		#endregion
 
@@ -75,7 +74,7 @@ namespace Native.Csharp.Tool
 		public string Read(string section, string key, string value = null)
 		{
 			StringBuilder buffer = new StringBuilder(65535);
-			Kernel32.GetPrivateProfileSectionA(section, buffer, buffer.Capacity, this.FileName);
+			Kernel32.GetPrivateProfileSectionA(section, buffer, buffer.Capacity, FileName);
 			string str = buffer.ToString();
 			if (string.IsNullOrEmpty(str))
 			{
@@ -95,7 +94,7 @@ namespace Native.Csharp.Tool
 			int result;
 			try
 			{
-				result = int.Parse(this.Read(section, key, string.Empty));
+				result = int.Parse(Read(section, key, string.Empty));
 			}
 			catch
 			{
@@ -115,7 +114,7 @@ namespace Native.Csharp.Tool
 			long result;
 			try
 			{
-				result = long.Parse(this.Read(section, key, string.Empty));
+				result = long.Parse(Read(section, key, string.Empty));
 			}
 			catch
 			{
@@ -135,7 +134,7 @@ namespace Native.Csharp.Tool
 			byte result;
 			try
 			{
-				result = byte.Parse(this.Read(section, key, string.Empty));
+				result = byte.Parse(Read(section, key, string.Empty));
 			}
 			catch
 			{
@@ -155,7 +154,7 @@ namespace Native.Csharp.Tool
 			float result;
 			try
 			{
-				result = float.Parse(this.Read(section, key, string.Empty));
+				result = float.Parse(Read(section, key, string.Empty));
 			}
 			catch
 			{
@@ -175,7 +174,7 @@ namespace Native.Csharp.Tool
 			double result;
 			try
 			{
-				result = double.Parse(this.Read(section, key, string.Empty));
+				result = double.Parse(Read(section, key, string.Empty));
 			}
 			catch
 			{
@@ -195,7 +194,7 @@ namespace Native.Csharp.Tool
 			bool result;
 			try
 			{
-				result = bool.Parse(this.Read(section, key, string.Empty));
+				result = bool.Parse(Read(section, key, string.Empty));
 			}
 			catch
 			{
@@ -215,7 +214,7 @@ namespace Native.Csharp.Tool
 			DateTime result;
 			try
 			{
-				result = DateTime.Parse(this.Read(section, key, string.Empty));
+				result = DateTime.Parse(Read(section, key, string.Empty));
 			}
 			catch
 			{
@@ -235,7 +234,7 @@ namespace Native.Csharp.Tool
 			TimeSpan result;
 			try
 			{
-				result = TimeSpan.Parse(this.Read(section, key, string.Empty));
+				result = TimeSpan.Parse(Read(section, key, string.Empty));
 			}
 			catch
 			{
@@ -252,7 +251,7 @@ namespace Native.Csharp.Tool
 		public List<string> ReadSections()
 		{
 			byte[] buffer = new byte[65535];
-			int rel = Kernel32.GetPrivateProfileSectionNamesA(buffer, buffer.GetUpperBound(0), this.FileName);
+			int rel = Kernel32.GetPrivateProfileSectionNamesA(buffer, buffer.GetUpperBound(0), FileName);
 			int iCnt, iPos;
 			List<string> arrayList = new List<string>();
 			string tmp;
@@ -280,7 +279,7 @@ namespace Native.Csharp.Tool
 		public bool SectionExists(string section)
 		{
 			StringBuilder buffer = new StringBuilder(65535);
-			Kernel32.GetPrivateProfileSectionA(section, buffer, buffer.Capacity, this.FileName);
+			Kernel32.GetPrivateProfileSectionA(section, buffer, buffer.Capacity, FileName);
 			return buffer.ToString().Trim() == "";
 		}
 		/// <summary>
@@ -308,7 +307,7 @@ namespace Native.Csharp.Tool
 		/// <param name="section">要删除的节的名字</param>
 		public void DeleteSection(string section)
 		{
-			Kernel32.WritePrivateProfileSectionA(section, null, this.FileName);
+			Kernel32.WritePrivateProfileSectionA(section, null, FileName);
 		}
 		/// <summary>
 		/// 添加一个节
@@ -316,15 +315,15 @@ namespace Native.Csharp.Tool
 		/// <param name="section">要添加的节名称</param>
 		public void AddSection(string section)
 		{
-			Kernel32.WritePrivateProfileSectionA(section, "", this.FileName);
+			Kernel32.WritePrivateProfileSectionA(section, "", FileName);
 		}
 		/// <summary>
 		/// 清空Ini配置文件
 		/// </summary>
 		public void Clear()
 		{
-			File.Delete(this.FileName);
-			File.Create(this.FileName);
+			File.Delete(FileName);
+			File.Create(FileName);
 		}
 		#endregion
 	}

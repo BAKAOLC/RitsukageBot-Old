@@ -15,7 +15,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		#region --字段--
 		private string _filePath = string.Empty;
 		private Encoding _encoding = Encoding.Default;
-		private static readonly Lazy<Regex[]> regices = new Lazy<Regex[]> (() => new Regex[]
+		private static readonly Lazy<Regex[]> regices = new Lazy<Regex[]> (() => new[]
 		 {
 			new Regex(@"^\[(.+)\]", RegexOptions.Compiled),						//匹配 节
 			new Regex(@"^([^\r\n=]+)=((?:[^\r\n]+)?)",RegexOptions.Compiled)    //匹配 键值对
@@ -35,11 +35,11 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		{
 			get
 			{
-				return this[this.Keys.ElementAt (index)];
+				return this[Keys.ElementAt (index)];
 			}
 			set
 			{
-				this[this.Keys.ElementAt (index)] = value;
+				this[Keys.ElementAt (index)] = value;
 			}
 		}
 
@@ -56,13 +56,13 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 			}
 			set
 			{
-				if (this.ContainsKey (name))
+				if (ContainsKey (name))
 				{
 					base[name] = value;
 				}
 				else
 				{
-					this.Add (value);
+					Add (value);
 				}
 			}
 		}
@@ -70,7 +70,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <summary>
 		/// 获取或设置用于读取或保存 Ini 配置项的 <see cref="System.Text.Encoding"/> 实例, 默认: ANSI
 		/// </summary>
-		public Encoding Encoding { get { return this._encoding; } set { this._encoding = value; } }
+		public Encoding Encoding { get { return _encoding; } set { _encoding = value; } }
 
 		/// <summary>
 		/// 获取或设置用于保存 Ini 配置项的 <see cref="Uri"/> 实例
@@ -87,9 +87,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <summary>
 		/// 初始化 <see cref="IniObject"/> 类的新实例, 该实例为空, 具有默认的初始容量并为键类型使用默认的相等比较器
 		/// </summary>
-		public IniObject ()
-			: base ()
-		{ }
+		public IniObject () { }
 		/// <summary>
 		/// 初始化 <see cref="IniObject"/> 类的新实例, 该实例为空, 具有指定的初始容量并未键类型提供默认的相等比较器
 		/// </summary>
@@ -122,7 +120,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>返回当前实例内所有 <see cref="IniSection"/> 的集合</returns>
 		public IniSection[] ToArray ()
 		{
-			return this.Values.ToArray ();
+			return Values.ToArray ();
 		}
 
 		/// <summary>
@@ -130,11 +128,11 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// </summary>
 		public void Save ()
 		{
-			if (this.Path == null)
+			if (Path == null)
 			{
 				throw new UriFormatException (string.Format ("Uri: {0}, 是无效的 Uri 对象", "IniObject.Path"));
 			}
-			this.Save (this.Path);
+			Save (Path);
 		}
 
 		/// <summary>
@@ -152,9 +150,9 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <param name="fileUri">要将文档保存到其中的文件的位置。</param>
 		public virtual void Save (Uri fileUri)
 		{
-			using (TextWriter textWriter = new StreamWriter (CheckinUri (fileUri), false, this.Encoding))
+			using (TextWriter textWriter = new StreamWriter (CheckinUri (fileUri), false, Encoding))
 			{
-				foreach (IniSection section in this.Values)
+				foreach (IniSection section in Values)
 				{
 					textWriter.WriteLine ("[{0}]", section.Name);
 					foreach (KeyValuePair<string, IniValue> pair in section)
@@ -236,8 +234,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// </summary>
 		/// <param name="fileUri"></param>
 		/// <returns></returns>
-		private static string CheckinUri (Uri fileUri)
-		{
+		private static string CheckinUri (Uri fileUri) {
 			if (!fileUri.IsAbsoluteUri)
 			{
 				string tempStr = string.Empty;
@@ -252,21 +249,11 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 				}
 				return System.IO.Path.Combine (AppDomain.CurrentDomain.BaseDirectory, tempStr);
 			}
-			else
+			if (fileUri.IsFile)
 			{
-				try
-				{
-					if (fileUri.IsFile)
-					{
-						return fileUri.OriginalString;
-					}
-					else
-					{
-						throw new InvalidOperationException ("Uri 无效, 不允许为非文件 Uri");
-					}
-				}
-				catch { throw; }
+				return fileUri.OriginalString;
 			}
+			throw new InvalidOperationException ("Uri 无效, 不允许为非文件 Uri");
 		}
 
 		/// <summary>
@@ -286,15 +273,14 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 					for (int i = 0; i < Regices.Length; i++)
 					{
 						Match match = Regices[i].Match (line);
-						if (match.Success)
-						{
+						if (match.Success) {
 							if (i == 0)
 							{
 								key = match.Groups[1].Value;
 								iniObj.Add (new IniSection (key));
 								break;
 							}
-							else if (i == 1)
+							if (i == 1)
 							{
 								iniObj[key].Add (match.Groups[1].Value.Trim (), match.Groups[2].Value);
 							}
@@ -328,7 +314,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 			StringBuilder iniString = new StringBuilder ();
 			using (TextWriter textWriter = new StringWriter (iniString))
 			{
-				foreach (IniSection section in this.Values)
+				foreach (IniSection section in Values)
 				{
 					textWriter.WriteLine ("[{0}]", section.Name.Trim ());
 					foreach (KeyValuePair<string, IniValue> pair in section)
