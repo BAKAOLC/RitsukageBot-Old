@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Native.Csharp.Sdk.Cqp.Enum
+﻿namespace Native.Csharp.Sdk.Cqp.Enum
 {
 	/// <summary>
 	/// 表示性别的枚举

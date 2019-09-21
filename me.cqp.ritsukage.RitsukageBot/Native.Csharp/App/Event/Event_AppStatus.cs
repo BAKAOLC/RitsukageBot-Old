@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using LibGit2Sharp;
 using Native.Csharp.App.Interface;
 using Native.Csharp.App.LuaEnv;
-using Native.Csharp.Sdk.Cqp;
+using Native.Csharp.Sdk.Cqp.Enum;
 
 namespace Native.Csharp.App.Event
 {
@@ -60,16 +57,16 @@ namespace Native.Csharp.App.Event
 			// 如非必要，不建议在这里加载窗口。（可以添加菜单，让用户手动打开窗口）
 			Common.IsRunning = true;
             LuaEnv.LuaEnv.RunLua("", "envent/AppEnable.lua");
-            LuaEnv.TimerRun.TimerStart();
+            TimerRun.TimerStart();
             if(Common.CqApi.GetLoginQQ() == 751323264)//默认不开启tcp服务器
-                LuaEnv.TcpServer.Start();
+                TcpServer.Start();
 
             //第一次启动，clone下来整个项目
             Task.Run(() => {
                 string gitPath = Common.AppDirectory + "git/";
                 if (Repository.IsValid(gitPath))
                     return;//已存在工程，不用再初始化了
-                Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Warning, "第一次启动的提示", "这不是错误提示\r\n" +
+                Common.CqApi.AddLoger(LogerLevel.Warning, "第一次启动的提示", "这不是错误提示\r\n" +
                     "正在下载初始脚本，请稍后");
                 try
                 {
@@ -85,7 +82,7 @@ namespace Native.Csharp.App.Event
                     Tools.CopyDirectory(gitPath + "appdata/lua", Common.AppDirectory + "lua");
                     Tools.CopyDirectory(gitPath + "appdata/xml", Common.AppDirectory + "xml");
                 }
-                Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Warning, "第一次启动的提示", "这不是错误提示\r\n" +
+                Common.CqApi.AddLoger(LogerLevel.Warning, "第一次启动的提示", "这不是错误提示\r\n" +
                     "初始脚本下载完成，可以使用了\r\n" +
                     "请注意更改初始配置");
             });

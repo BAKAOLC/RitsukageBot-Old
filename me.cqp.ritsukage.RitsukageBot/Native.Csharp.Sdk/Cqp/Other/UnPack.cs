@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -11,8 +10,8 @@ namespace Native.Csharp.Sdk.Cqp.Other
 	public class UnPack
 	{
 		#region --字段--
-		private readonly byte[] _bytes = null;
-		private int _index = 0;
+		private readonly byte[] _bytes;
+		private int _index;
 		#endregion
 
 		#region --属性--
@@ -23,7 +22,7 @@ namespace Native.Csharp.Sdk.Cqp.Other
 		{
 			get
 			{
-				return this._bytes.Length - this._index + 1;
+				return _bytes.Length - _index + 1;
 			}
 		}
 		#endregion
@@ -35,7 +34,7 @@ namespace Native.Csharp.Sdk.Cqp.Other
 		/// <param name="data">预处理的 byte[] </param>
 		public UnPack(byte[] data)
 		{
-			this._bytes = data;
+			_bytes = data;
 		}
 		#endregion
 
@@ -46,7 +45,7 @@ namespace Native.Csharp.Sdk.Cqp.Other
 		/// <returns></returns>
 		public byte[] GetAll()
 		{
-			return GetData(this._bytes.Length - this._index);
+			return GetData(_bytes.Length - _index);
 		}
 		/// <summary>
 		/// 获取指定长度 byte[] 
@@ -55,7 +54,7 @@ namespace Native.Csharp.Sdk.Cqp.Other
 		/// <returns></returns>
 		public byte[] GetBin(int len)
 		{
-			return this.GetData(len);
+			return GetData(len);
 		}
 		/// <summary>
 		/// 获取一个 byte
@@ -63,7 +62,7 @@ namespace Native.Csharp.Sdk.Cqp.Other
 		/// <returns></returns>
 		public byte GetByte()
 		{
-			return this.GetData(1)[0];
+			return GetData(1)[0];
 		}
 		/// <summary>
 		/// 获取一个 Int16 数据
@@ -71,7 +70,7 @@ namespace Native.Csharp.Sdk.Cqp.Other
 		/// <returns></returns>
 		public short GetInt16()
 		{
-			return BitConverter.ToInt16(this.GetData(2, true), 0);
+			return BitConverter.ToInt16(GetData(2, true), 0);
 		}
 		/// <summary>
 		/// 获取一个 Int32 数据
@@ -79,7 +78,7 @@ namespace Native.Csharp.Sdk.Cqp.Other
 		/// <returns></returns>
 		public int GetInt32()
 		{
-			return BitConverter.ToInt32(this.GetData(4, true), 0);
+			return BitConverter.ToInt32(GetData(4, true), 0);
 		}
 		/// <summary>
 		/// 获取一个 Int64 数据
@@ -87,7 +86,7 @@ namespace Native.Csharp.Sdk.Cqp.Other
 		/// <returns></returns>
 		public long GetInt64()
 		{
-			return BitConverter.ToInt64(this.GetData(8, true), 0);
+			return BitConverter.ToInt64(GetData(8, true), 0);
 		}
 		/// <summary>
 		/// 获取一个 String 数据
@@ -100,8 +99,8 @@ namespace Native.Csharp.Sdk.Cqp.Other
 			{
 				code = Encoding.Default;
 			}
-			short len = this.GetInt16();
-			return code.GetString(this.GetData(len));
+			short len = GetInt16();
+			return code.GetString(GetData(len));
 		}
 		/// <summary>
 		/// 获取令牌
@@ -109,7 +108,7 @@ namespace Native.Csharp.Sdk.Cqp.Other
 		/// <returns></returns>
 		public byte[] GetToken()
 		{
-			short len = this.GetInt16();
+			short len = GetInt16();
 			return GetBin(len);
 		}
 		#endregion
@@ -126,7 +125,7 @@ namespace Native.Csharp.Sdk.Cqp.Other
 			byte[] temp = new byte[len];
 			Buffer.BlockCopy(_bytes, _index, temp, 0, len);
 			_index += len;
-			return isReverse == true ? temp.Reverse().ToArray() : temp;
+			return isReverse ? temp.Reverse().ToArray() : temp;
 		}
 		#endregion
 	}

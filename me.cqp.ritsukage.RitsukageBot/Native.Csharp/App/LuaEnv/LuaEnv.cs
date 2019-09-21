@@ -1,30 +1,42 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using Native.Csharp.App;
+using Native.Csharp.Sdk.Cqp.Enum;
+using NLua;
 
-namespace Native.Csharp.App.LuaEnv
-{
-    class LuaEnv
-    {
-        public static int SetGroupSpecialTitle(long groupId, long qqId, string specialTitle, int time)
-        {
-            TimeSpan span = new TimeSpan(time/60/60/24, time/60/60%60, time/60%60, time%60);
+namespace Native.Csharp.App.LuaEnv {
+    class LuaEnv {
+        private static Lua luaField;
+        private static readonly object luaLock = new object();
+
+        public static Lua Lua {
+            get {
+                lock (luaLock) {
+                    if (luaField == null) {
+                        luaField = new Lua();
+                        luaField.State.Encoding = Encoding.UTF8;
+                        luaField.LoadCLRPackage();
+                        luaField["handled"] = false; //处理标志
+                        Initial(luaField);
+                    }
+                    return luaField;
+                }
+            }
+        }
+
+        public static int SetGroupSpecialTitle(long groupId, long qqId, string specialTitle, int time) {
+            TimeSpan span = new TimeSpan(time / 60 / 60 / 24, time / 60 / 60 % 60, time / 60 % 60, time % 60);
             return Common.CqApi.SetGroupSpecialTitle(groupId, qqId, specialTitle, span);
         }
 
 
-        public static int SetGroupAnonymousBanSpeak(long groupId, string anonymous, int time)
-        {
+        public static int SetGroupAnonymousBanSpeak(long groupId, string anonymous, int time) {
             TimeSpan span = new TimeSpan(time / 60 / 60 / 24, time / 60 / 60 % 60, time / 60 % 60, time % 60);
             return Common.CqApi.SetGroupAnonymousBanSpeak(groupId, anonymous, span);
         }
 
-        public static int SetGroupBanSpeak(long groupId, long qqId, int time)
-        {
+        public static int SetGroupBanSpeak(long groupId, long qqId, int time) {
             TimeSpan span = new TimeSpan(time / 60 / 60 / 24, time / 60 / 60 % 60, time / 60 % 60, time % 60);
             return Common.CqApi.SetGroupBanSpeak(groupId, qqId, span);
         }
@@ -34,8 +46,7 @@ namespace Native.Csharp.App.LuaEnv
         /// </summary>
         /// <param name="lua"></param>
         /// <returns></returns>
-        public static void Initial(NLua.Lua lua)
-        {
+        public static void Initial(Lua lua) {
             ///////////////
             //酷q类的接口//
             //////////////
@@ -82,10 +93,10 @@ namespace Native.Csharp.App.LuaEnv
             lua.RegisterFunction("cqGetLoginNick", null, typeof(LuaApi).GetMethod("GetLoginNick"));
             //获取当前登录QQ的昵称
             lua.RegisterFunction("cqAppDirectory", null, typeof(LuaApi).GetMethod("GetAppDirectory"));
-			//取应用目录
-			//lua.RegisterFunction("cqGetQQInfo", null, typeof(LuaApi).GetMethod("GetQQInfo"));
-			//获取QQ账户信息
-			lua.RegisterFunction("cqGetMemberInfo", null, typeof(LuaApi).GetMethod("GetMemberInfo"));
+            //取应用目录
+            //lua.RegisterFunction("cqGetQQInfo", null, typeof(LuaApi).GetMethod("GetQQInfo"));
+            //获取QQ账户信息
+            lua.RegisterFunction("cqGetMemberInfo", null, typeof(LuaApi).GetMethod("GetMemberInfo"));
             //获取群成员信息
             //lua.RegisterFunction("cqGetMemberList", null, typeof(LuaApi).GetMethod("GetMemberList"));
             //获取群成员列表
@@ -109,7 +120,11 @@ namespace Native.Csharp.App.LuaEnv
             //置讨论组退出
             lua.RegisterFunction("cqSetGroupSpecialTitle", null, typeof(LuaEnv).GetMethod("SetGroupSpecialTitle"));
             //置群成员专属头衔
-            lua.RegisterFunction("cqSetGroupAnonymousBanSpeak", null, typeof(LuaEnv).GetMethod("SetGroupAnonymousBanSpeak"));
+            lua.RegisterFunction(
+                "cqSetGroupAnonymousBanSpeak",
+                null,
+                typeof(LuaEnv).GetMethod("SetGroupAnonymousBanSpeak")
+            );
             //置匿名群员禁言
             lua.RegisterFunction("cqSetGroupBanSpeak", null, typeof(LuaEnv).GetMethod("SetGroupBanSpeak"));
             //置群员禁言
@@ -190,6 +205,16 @@ namespace Native.Csharp.App.LuaEnv
             //按结果查源头（反查）
 
             lua.DoFile(Common.AppDirectory + "lua/require/head.lua");
+
+
+            ////// sand box Function (from SandBox Method)
+            try {
+                lua.RegisterFunction("apiGetPath", null, typeof(LuaApi).GetMethod("GetPath"));
+                //获取程序运行目录
+                lua.RegisterFunction("apiGetAsciiHex", null, typeof(LuaApi).GetMethod("GetAsciiHex"));
+            } catch (Exception e) {
+                Common.CqApi.AddLoger(LogerLevel.Error, "lua注册SandBox错误", e.ToString());
+            }
         }
 
 
@@ -198,33 +223,27 @@ namespace Native.Csharp.App.LuaEnv
         /// </summary>
         /// <param name="code">提前运行的代码</param>
         /// <param name="file">文件路径（app/xxx.xxx.xx/lua/开头）</param>
-        public static bool RunLua(string code,string file,ArrayList args = null)
-        {
+        public static bool RunLua(string code, string file, ArrayList args = null) {
             //还没下载lua脚本，先不响应消息
-            if (!File.Exists(Common.AppDirectory + "lua/require/head.lua"))
-                return false;
+            if (!File.Exists(Common.AppDirectory + "lua/require/head.lua")) return false;
 
-            using (var lua = new NLua.Lua())
-            {
-                try
-                {
-                    lua.State.Encoding = Encoding.UTF8;
-                    lua.LoadCLRPackage();
-                    lua["handled"] = false;//处理标志
-                    Initial(lua);
-                    if(args != null)
-                        for(int i=0;i<args.Count;i+=2)
-                        {
-                            lua[(string)args[i]] = args[i + 1];
+            var lua = Lua;
+            lock (luaLock) {
+                try {
+                    //maybe.... only once? by yys
+//                    lua.State.Encoding = Encoding.UTF8;
+//                    lua.LoadCLRPackage();
+//                    lua["handled"] = false;//处理标志
+//                    Initial(lua);
+                    if (args != null)
+                        for (int i = 0; i < args.Count; i += 2) {
+                            lua[(string) args[i]] = args[i + 1];
                         }
                     lua.DoString(code);
-                    if (file != "")
-                        lua.DoFile(Common.AppDirectory + "lua/" + file);
-                    return (bool)lua["handled"];
-                }
-                catch (Exception e)
-                {
-                    Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Error, "lua脚本错误", e.ToString());
+                    if (file != "") lua.DoFile(Common.AppDirectory + "lua/" + file);
+                    return (bool) lua["handled"];
+                } catch (Exception e) {
+                    Common.CqApi.AddLoger(LogerLevel.Error, "lua脚本错误", e.ToString());
                     return false;
                 }
             }
@@ -235,26 +254,23 @@ namespace Native.Csharp.App.LuaEnv
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
-        public static string RunSandBox(string code)
-        {
-            using (var lua = new NLua.Lua())
-            {
-                try
-                {
-                    lua.State.Encoding = Encoding.UTF8;
-                    lua.RegisterFunction("apiGetPath", null, typeof(LuaApi).GetMethod("GetPath"));
-                    //获取程序运行目录
-                    lua.RegisterFunction("apiGetAsciiHex", null, typeof(LuaApi).GetMethod("GetAsciiHex"));
+        public static string RunSandBox(string code) {
+            var lua = Lua;
+            lock (luaLock) {
+                try {
+                    //函数干脆一起注册了 部分也在new的时候操作了 by:yys
+//                    lua.State.Encoding = Encoding.UTF8;
+//                    lua.RegisterFunction("apiGetPath", null, typeof(LuaApi).GetMethod("GetPath"));
+//                    //获取程序运行目录
+//                    lua.RegisterFunction("apiGetAsciiHex", null, typeof(LuaApi).GetMethod("GetAsciiHex"));
                     //获取字符串ascii编码的hex串
-                    lua["lua_run_result_var"] = "";//返回值所在的变量
+                    lua["lua_run_result_var"] = ""; //返回值所在的变量
                     lua.DoFile(Common.AppDirectory + "lua/require/sandbox/head.lua");
                     lua.DoString(code);
                     return lua["lua_run_result_var"].ToString();
-                }
-                catch (Exception e)
-                {
-                    Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Error, "沙盒lua脚本错误", e.ToString());
-                    return "运行错误：" + e.ToString();
+                } catch (Exception e) {
+                    Common.CqApi.AddLoger(LogerLevel.Error, "沙盒lua脚本错误", e.ToString());
+                    return "运行错误：" + e;
                 }
             }
         }

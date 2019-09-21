@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Native.Csharp.Repair.Enum
 {
@@ -9,7 +6,7 @@ namespace Native.Csharp.Repair.Enum
 	 *	移植自: 00.00.dotnetRedirect 插件, 原作者: 成音S. 引用请带上此注释
 	 *	论坛地址: https://cqp.cc/t/42920
 	 */
-	[System.Flags]
+	[Flags]
 	public enum LoadLibraryFlags : uint
 	{
 		None = 0,

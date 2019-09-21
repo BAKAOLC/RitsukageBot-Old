@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Native.Csharp.App.Model
+﻿namespace Native.Csharp.App.Model
 {
 	public class PrivateMessageEventArgs : EventArgsBase
 	{

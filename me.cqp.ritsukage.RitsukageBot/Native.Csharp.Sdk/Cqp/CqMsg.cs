@@ -1,12 +1,7 @@
-﻿using Native.Csharp.Sdk.Cqp.Enum;
-using Native.Csharp.Sdk.Cqp.Model;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Native.Csharp.Sdk.Cqp.Enum;
+using Native.Csharp.Sdk.Cqp.Model;
 
 namespace Native.Csharp.Sdk.Cqp
 {
@@ -16,8 +11,7 @@ namespace Native.Csharp.Sdk.Cqp
 	public class CqMsg
 	{
 		#region --字段--
-		private static Regex[] _regex = new Regex[]
-		{
+		private static Regex[] _regex = {
 			new Regex(@"\[CQ:([A-Za-z]*)(?:(,[^\[\]]+))?\]", RegexOptions.Compiled),	// 匹配CQ码
 			new Regex(@",([A-Za-z]+)=([^,\[\]]+)", RegexOptions.Compiled)				// 匹配键值对
 		};
@@ -51,7 +45,7 @@ namespace Native.Csharp.Sdk.Cqp
 
 					#region --解析 CQ码 类型--
 					CqCodeType type = CqCodeType.Unknown;
-					if (System.Enum.TryParse<CqCodeType> (match.Groups[1].Value, true, out type))
+					if (System.Enum.TryParse (match.Groups[1].Value, true, out type))
 					{
 						tempCode.Type = type;
 					}

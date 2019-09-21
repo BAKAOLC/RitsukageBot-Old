@@ -2,21 +2,17 @@
  *	此代码由模板生成, 请勿随意修改此源代码, 防止出现错误
  *	需要更新 AppID 请右击模板文件, 点击运行自定义工具
  */
+
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
-using Unity;
 using Native.Csharp.App.Event;
-using Native.Csharp.App.Model;
 using Native.Csharp.App.Interface;
+using Native.Csharp.App.Model;
 using Native.Csharp.Sdk.Cqp;
 using Native.Csharp.Sdk.Cqp.Enum;
 using Native.Csharp.Tool;
-using Native.Csharp.Repair;
+using Unity;
 
 namespace Native.Csharp.App.Core
 {
@@ -74,7 +70,7 @@ namespace Native.Csharp.App.Core
 			Common.CqApi = new CqApi (authCode);
 
 			// AuthCode 传递完毕后将对象加入容器托管, 以便在其它项目中调用
-			Common.UnityContainer.RegisterInstance<CqApi> (Common.CqApi);
+			Common.UnityContainer.RegisterInstance (Common.CqApi);
 
 			// 注册插件全局异常捕获回调, 用于捕获未处理的异常, 回弹给 酷Q 做处理
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
@@ -95,10 +91,10 @@ namespace Native.Csharp.App.Core
 			foreach (var appStatus in Common.UnityContainer.ResolveAll<IEvent_AppStatus> ())
 			{
 				// 分发 IEvent_AppStatus 接口到事件
-				LibExport.CqStartup += appStatus.CqStartup;
-				LibExport.CqExit += appStatus.CqExit;
-				LibExport.AppEnable += appStatus.AppEnable;
-				LibExport.AppDisable += appStatus.AppDisable;
+				CqStartup += appStatus.CqStartup;
+				CqExit += appStatus.CqExit;
+				AppEnable += appStatus.AppEnable;
+				AppDisable += appStatus.AppDisable;
 			}
 			#endregion
 
@@ -107,8 +103,8 @@ namespace Native.Csharp.App.Core
 			foreach (var discussMessage in Common.UnityContainer.ResolveAll<IEvent_DiscussMessage> ())
 			{
 				// 分发 IEvent_DiscussMessage 接口到事件
-				LibExport.ReceiveDiscussMessage += discussMessage.ReceiveDiscussMessage;
-				LibExport.ReceiveDiscussPrivateMessage += discussMessage.ReceiveDiscussPrivateMessage;
+				ReceiveDiscussMessage += discussMessage.ReceiveDiscussMessage;
+				ReceiveDiscussPrivateMessage += discussMessage.ReceiveDiscussPrivateMessage;
 			}
 			#endregion
 
@@ -117,9 +113,9 @@ namespace Native.Csharp.App.Core
 			foreach (var friendMessage in Common.UnityContainer.ResolveAll<IEvent_FriendMessage> ())
 			{
 				// 分发 IEvent_FriendMessage 接口到事件
-				LibExport.ReceiveFriendAdd += friendMessage.ReceiveFriendAddRequest;
-				LibExport.ReceiveFriendIncrease += friendMessage.ReceiveFriendIncrease;
-				LibExport.ReceiveFriendMessage += friendMessage.ReceiveFriendMessage;
+				ReceiveFriendAdd += friendMessage.ReceiveFriendAddRequest;
+				ReceiveFriendIncrease += friendMessage.ReceiveFriendIncrease;
+				ReceiveFriendMessage += friendMessage.ReceiveFriendMessage;
 			}
 			#endregion
 
@@ -128,17 +124,17 @@ namespace Native.Csharp.App.Core
 			foreach (var groupMessage in Common.UnityContainer.ResolveAll<IEvent_GroupMessage> ())
 			{
 				// 分发 IEvent_GroupMessage 接口到事件
-				LibExport.ReceiveGroupMessage += groupMessage.ReceiveGroupMessage;
-				LibExport.ReceiveGroupPrivateMessage += groupMessage.ReceiveGroupPrivateMessage;
-				LibExport.ReceiveFileUploadMessage += groupMessage.ReceiveGroupFileUpload;
-				LibExport.ReceiveManageIncrease += groupMessage.ReceiveGroupManageIncrease;
-				LibExport.ReceiveManageDecrease += groupMessage.ReceiveGroupManageDecrease;
-				LibExport.ReceiveMemberJoin += groupMessage.ReceiveGroupMemberJoin;
-				LibExport.ReceiveMemberInvitee += groupMessage.ReceiveGroupMemberInvitee;
-				LibExport.ReceiveMemberLeave += groupMessage.ReceiveGroupMemberLeave;
-				LibExport.ReceiveMemberRemove += groupMessage.ReceiveGroupMemberRemove;
-				LibExport.ReceiveGroupAddApply += groupMessage.ReceiveGroupAddApply;
-				LibExport.ReceiveGroupAddInvitee += groupMessage.ReceiveGroupAddInvitee;
+				ReceiveGroupMessage += groupMessage.ReceiveGroupMessage;
+				ReceiveGroupPrivateMessage += groupMessage.ReceiveGroupPrivateMessage;
+				ReceiveFileUploadMessage += groupMessage.ReceiveGroupFileUpload;
+				ReceiveManageIncrease += groupMessage.ReceiveGroupManageIncrease;
+				ReceiveManageDecrease += groupMessage.ReceiveGroupManageDecrease;
+				ReceiveMemberJoin += groupMessage.ReceiveGroupMemberJoin;
+				ReceiveMemberInvitee += groupMessage.ReceiveGroupMemberInvitee;
+				ReceiveMemberLeave += groupMessage.ReceiveGroupMemberLeave;
+				ReceiveMemberRemove += groupMessage.ReceiveGroupMemberRemove;
+				ReceiveGroupAddApply += groupMessage.ReceiveGroupAddApply;
+				ReceiveGroupAddInvitee += groupMessage.ReceiveGroupAddInvitee;
 			}
 			#endregion
 
@@ -147,7 +143,7 @@ namespace Native.Csharp.App.Core
 			foreach (var otherMessage in Common.UnityContainer.ResolveAll<IEvent_OtherMessage> ())
 			{
 				// 分发 IEvent_OtherMessage 接口到事件
-				LibExport.ReceiveQnlineStatusMessage += otherMessage.ReceiveOnlineStatusMessage;
+				ReceiveQnlineStatusMessage += otherMessage.ReceiveOnlineStatusMessage;
 			}
 			#endregion
 		}

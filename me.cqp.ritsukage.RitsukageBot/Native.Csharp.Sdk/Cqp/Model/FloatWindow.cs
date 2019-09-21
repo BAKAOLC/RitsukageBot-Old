@@ -1,8 +1,4 @@
 ﻿using Native.Csharp.Sdk.Cqp.Enum;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Native.Csharp.Sdk.Cqp.Model
 {

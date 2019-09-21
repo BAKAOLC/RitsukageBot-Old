@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
 
@@ -28,20 +23,16 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns></returns>
 		public new IniValue this[string name]
 		{
-			get
-			{
-				if (base.ContainsKey (name))
+			get {
+				if (ContainsKey (name))
 				{
 					return base[name];
 				}
-				else
-				{
-					return IniValue.Empty;
-				}
+				return IniValue.Empty;
 			}
 			set
 			{
-				if (base.ContainsKey (name))
+				if (ContainsKey (name))
 				{
 					base[name] = value;
 				}
@@ -54,7 +45,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <summary>
 		/// 获取或设置当前节名称
 		/// </summary>
-		public string Name { get { return this._name; } set { this._name = value; } }
+		public string Name { get { return _name; } set { _name = value; } }
 		#endregion
 
 		#region --构造函数--
@@ -62,9 +53,8 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// 初始化 IniSection 类的新实例，该实例为空，具有默认的初始容量并为键类型使用默认的相等比较器。
 		/// </summary>
 		/// <param name="name">IniSection 关联的名称</param>
-		public IniSection (string name) : base ()
-		{
-			this._name = name;
+		public IniSection (string name) {
+			_name = name;
 		}
 		/// <summary>
 		/// 初始化 IniSection 类的新实例，该实例为空，具有指定的初始容量并为键类型使用默认的相等比较器。
@@ -73,7 +63,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <param name="capacity">IniSection 可包含的初始元素数。</param>
 		public IniSection (string name, int capacity) : base (capacity)
 		{
-			this._name = name;
+			_name = name;
 		}
 		/// <summary>
 		///  初始化 IniSection 类的新实例，该实例为空，具有默认的初始容量并使用指定的 IEqualityComparer&lt;in string&gt;。
@@ -82,7 +72,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <param name="comparer">比较键时要使用的 IEqualityComparer 实现，或者为 null，以便为键类型使用默认的 IEqualityComparer。</param>
 		public IniSection (string name, IEqualityComparer<string> comparer) : base (comparer)
 		{
-			this._name = name;
+			_name = name;
 		}
 		/// <summary>
 		/// 初始化 IniSection 类的新实例，该实例包含从指定的 IniSection 复制的元素并为键类型使用默认的相等比较器。
@@ -91,7 +81,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <param name="dictionary">IDictionary&lt;string, IniValue&gt;，它的元素被复制到新 IniSection。</param>
 		public IniSection (string name, IDictionary<string, IniValue> dictionary) : base (dictionary)
 		{
-			this._name = name;
+			_name = name;
 		}
 		/// <summary>
 		///  初始化 IniSection 类的新实例，该实例为空，具有指定的初始容量并使用指定的 IEqualityComparer。
@@ -101,7 +91,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <param name="comparer">比较键时要使用的 IEqualityComparer&lt;in string&gt;实现，或者为 null，以便为键类型使用默认的 EqualityComparer。</param>
 		public IniSection (string name, int capacity, IEqualityComparer<string> comparer) : base (capacity, comparer)
 		{
-			this._name = name;
+			_name = name;
 		}
 		/// <summary>
 		/// 初始化 IniSection 类的新实例，该实例包含从指定的 IDictionary&lt;string, IniValue&gt; 中复制的元素并使用指定的 IEqualityComparer&lt;in string&gt;。
@@ -111,7 +101,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <param name="comparer">比较键时要使用的 IEqualityComparer&lt;in string&gt;实现，或者为 null，以便为键类型使用默认的 EqualityComparer。</param>
 		public IniSection (string name, IDictionary<string, IniValue> dictionary, IEqualityComparer<string> comparer) : base (dictionary, comparer)
 		{
-			this._name = name;
+			_name = name;
 		}
 		/// <summary>
 		/// 用序列化数据初始化 IniSection 类的新实例。
@@ -121,7 +111,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <param name="context">一个 System.Runtime.Serialization.StreamingContext 结构包含与 IniSection 关联的序列化流的源和目标。</param>
 		protected IniSection (string name, SerializationInfo info, StreamingContext context) : base (info, context)
 		{
-			this._name = name;
+			_name = name;
 		}
 		#endregion
 
@@ -133,7 +123,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <param name="value">要添加到 IniSection 结尾处的对象的 Value</param>
 		public void Add (string key, bool value)
 		{
-			this.Add (key, value.ToString ());
+			Add (key, value.ToString ());
 		}
 
 		/// <summary>
@@ -143,7 +133,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <param name="value">要添加到 IniSection 结尾处的对象的 Value</param>
 		public void Add (string key, byte value)
 		{
-			this.Add (key, value.ToString ());
+			Add (key, value.ToString ());
 		}
 
 		/// <summary>
@@ -153,7 +143,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <param name="value">要添加到 IniSection 结尾处的对象的 Value</param>
 		public void Add (string key, char value)
 		{
-			this.Add (key, value.ToString ());
+			Add (key, value.ToString ());
 		}
 
 		/// <summary>
@@ -163,7 +153,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <param name="value">要添加到 IniSection 结尾处的对象的 Value</param>
 		public void Add (string key, DateTime value)
 		{
-			this.Add (key, value.ToString ());
+			Add (key, value.ToString ());
 		}
 
 		/// <summary>
@@ -173,7 +163,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <param name="value">要添加到 IniSection 结尾处的对象的 Value</param>
 		public void Add (string key, decimal value)
 		{
-			this.Add (key, value.ToString ());
+			Add (key, value.ToString ());
 		}
 
 		/// <summary>
@@ -183,7 +173,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <param name="value">要添加到 IniSection 结尾处的对象的 Value</param>
 		public void Add (string key, double value)
 		{
-			this.Add (key, value.ToString ());
+			Add (key, value.ToString ());
 		}
 
 		/// <summary>
@@ -193,7 +183,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <param name="value">要添加到 IniSection 结尾处的对象的 Value</param>
 		public void Add (string key, short value)
 		{
-			this.Add (key, value.ToString ());
+			Add (key, value.ToString ());
 		}
 
 		/// <summary>
@@ -203,7 +193,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <param name="value">要添加到 IniSection 结尾处的对象的 Value</param>
 		public void Add (string key, int value)
 		{
-			this.Add (key, value.ToString ());
+			Add (key, value.ToString ());
 		}
 
 		/// <summary>
@@ -213,7 +203,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <param name="value">要添加到 IniSection 结尾处的对象的 Value</param>
 		public void Add (string key, long value)
 		{
-			this.Add (key, value.ToString ());
+			Add (key, value.ToString ());
 		}
 
 		/// <summary>
@@ -223,7 +213,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <param name="value">要添加到 IniSection 结尾处的对象的 Value</param>
 		public void Add (string key, sbyte value)
 		{
-			this.Add (key, value.ToString ());
+			Add (key, value.ToString ());
 		}
 
 		/// <summary>
@@ -233,7 +223,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <param name="value">要添加到 IniSection 结尾处的对象的 Value</param>
 		public void Add (string key, float value)
 		{
-			this.Add (key, value.ToString ());
+			Add (key, value.ToString ());
 		}
 
 		/// <summary>
@@ -243,7 +233,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <param name="value">要添加到 IniSection 结尾处的对象的 Value, 若此参数为 null, 将用 IniSection.Empty 代替</param>
 		public void Add (string key, string value)
 		{
-			this.Add (key, new IniValue (value));
+			Add (key, new IniValue (value));
 		}
 
 		/// <summary>
@@ -253,7 +243,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <param name="value">要添加到 IniSection 结尾处的对象的 Value</param>
 		public void Add (string key, ushort value)
 		{
-			this.Add (key, value.ToString ());
+			Add (key, value.ToString ());
 		}
 
 		/// <summary>
@@ -263,7 +253,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <param name="value">要添加到 IniSection 结尾处的对象的 Value</param>
 		public void Add (string key, uint value)
 		{
-			this.Add (key, value.ToString ());
+			Add (key, value.ToString ());
 		}
 
 		/// <summary>
@@ -273,7 +263,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <param name="value">要添加到 IniSection 结尾处的对象的 Value</param>
 		public void Add (string key, ulong value)
 		{
-			this.Add (key, value.ToString ());
+			Add (key, value.ToString ());
 		}
 		#endregion
 
@@ -287,7 +277,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 			StringBuilder iniStr = new StringBuilder ();
 			using (TextWriter textWriter = new StringWriter (iniStr))
 			{
-				textWriter.WriteLine ("[{0}]", this.Name.Trim ());	//添加 "节"
+				textWriter.WriteLine ("[{0}]", Name.Trim ());	//添加 "节"
 				foreach (KeyValuePair<string, IniValue> item in this)
 				{
 					textWriter.WriteLine ("{0}={1}", item.Key.Trim (), item.Value.Value.Trim ());

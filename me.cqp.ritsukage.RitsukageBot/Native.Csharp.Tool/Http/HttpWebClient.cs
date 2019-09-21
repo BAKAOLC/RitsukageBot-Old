@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
@@ -61,11 +59,7 @@ namespace Native.Csharp.Tool.Http
         #endregion
 
         #region --构造函数--
-        /// <summary>
-        /// 初始化 HttpWebClient 实例对象
-        /// </summary>
-        public HttpWebClient ()
-        { }
+
         #endregion
 
         #region --公开方法--
@@ -675,7 +669,7 @@ namespace Native.Csharp.Tool.Http
             {
                 httpWebRequest.CookieContainer = new CookieContainer ();
             }
-            if (!string.IsNullOrEmpty (this.UserAgent))
+            if (!string.IsNullOrEmpty (UserAgent))
             {
                 httpWebRequest.UserAgent = UserAgent;
             }
@@ -685,37 +679,37 @@ namespace Native.Csharp.Tool.Http
             }
             if (TimeOut > 0)
             {
-                httpWebRequest.Timeout = this.TimeOut;
+                httpWebRequest.Timeout = TimeOut;
             }
-            if (!string.IsNullOrEmpty (this.Accept))
+            if (!string.IsNullOrEmpty (Accept))
             {
-                httpWebRequest.Accept = this.Accept;
+                httpWebRequest.Accept = Accept;
             }
             else
             {
                 httpWebRequest.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
             }
-            if (this.AllowAutoRedirect)
+            if (AllowAutoRedirect)
             {
-                httpWebRequest.AllowAutoRedirect = this.AllowAutoRedirect;
-                if (this.MaximumAutomaticRedirections <= 0)
+                httpWebRequest.AllowAutoRedirect = AllowAutoRedirect;
+                if (MaximumAutomaticRedirections <= 0)
                 {
                     httpWebRequest.MaximumAutomaticRedirections = 5;
                 }
                 else
                 {
-                    httpWebRequest.MaximumAutomaticRedirections = this.MaximumAutomaticRedirections;
+                    httpWebRequest.MaximumAutomaticRedirections = MaximumAutomaticRedirections;
                 }
             }
-            if (!string.IsNullOrEmpty (this.Referer))
+            if (!string.IsNullOrEmpty (Referer))
             {
-                httpWebRequest.Referer = this.Referer;
+                httpWebRequest.Referer = Referer;
             }
             if (httpWebRequest.Method.ToUpper () != "GET")   //GET不需要包体参数
             {
-                if (!string.IsNullOrEmpty (this.ContentType))
+                if (!string.IsNullOrEmpty (ContentType))
                 {
-                    httpWebRequest.ContentType = this.ContentType;
+                    httpWebRequest.ContentType = ContentType;
                 }
                 else
                 {
@@ -733,9 +727,9 @@ namespace Native.Csharp.Tool.Http
         protected override WebResponse GetWebResponse (WebRequest request)
         {
             HttpWebResponse httpWebResponse = (HttpWebResponse)base.GetWebResponse (request);
-            this.CookieCollection = httpWebResponse.Cookies;
-            this.Method = httpWebResponse.Method;
-            this.ContentType = httpWebResponse.ContentType;
+            CookieCollection = httpWebResponse.Cookies;
+            Method = httpWebResponse.Method;
+            ContentType = httpWebResponse.ContentType;
             return httpWebResponse;
         }
         #endregion

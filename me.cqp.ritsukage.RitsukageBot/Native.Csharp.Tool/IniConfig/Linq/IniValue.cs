@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Native.Csharp.Tool.IniConfig.Linq
 {
@@ -22,7 +19,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <summary>
 		/// 获取或设置一个值, 该值指示 IniValue 在文件中的表示形式值
 		/// </summary>
-		public string Value { get { return this._value; } set { this._value = value; } }
+		public string Value { get { return _value; } set { _value = value; } }
 		#endregion
 
 		#region --构造函数--
@@ -116,7 +113,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <param name="value">用于初始化的值</param>
 		public IniValue (string value)
 		{
-			this._value = value;
+			_value = value;
 		}
 		/// <summary>
 		/// 初始化 IniValue 实例对象
@@ -157,11 +154,8 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 			{
 				return 1;
 			}
-			else
-			{
-				IniValue value = obj as IniValue;
-				return this._value.CompareTo (value._value);
-			}
+			IniValue value = obj as IniValue;
+			return _value.CompareTo (value._value);
 		}
 
 		/// <summary>
@@ -175,7 +169,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 			{
 				throw new ArgumentNullException ("other");
 			}
-			return this._value.CompareTo (other._value);
+			return _value.CompareTo (other._value);
 		}
 
 		/// <summary>
@@ -189,7 +183,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 			{
 				return false;
 			}
-			return string.Compare (this._value, other._value) == 0;
+			return string.Compare (_value, other._value) == 0;
 		}
 
 		/// <summary>
@@ -199,7 +193,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>如果当前对象等于 obj 参数，则为 true；否则为 false。</returns>
 		public TypeCode GetTypeCode ()
 		{
-			if (this._value == null)
+			if (_value == null)
 			{
 				return TypeCode.Empty;
 			}
@@ -212,7 +206,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>如果 true 等于该实例，则为 <see cref="System.Boolean.TrueString"/>；如果 false 等于该实例 或 <see cref="System.Boolean.FalseString"/>，则为 null</returns>
 		public bool ToBoolean ()
 		{
-			return this.ToBoolean (null);
+			return ToBoolean (null);
 		}
 
 		/// <summary>
@@ -223,7 +217,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		public bool ToBoolean (bool defaultValue)
 		{
 			bool result;
-			return bool.TryParse (this.Value, out result) ? result : defaultValue;
+			return bool.TryParse (Value, out result) ? result : defaultValue;
 		}
 
 		/// <summary>
@@ -233,7 +227,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>如果 true 等于该实例，则为 System.Boolean.TrueString；如果 false 等于该实例 或 System.Boolean.FalseString，则为 null</returns>
 		public bool ToBoolean (IFormatProvider provider)
 		{
-			return Convert.ToBoolean (this._value, provider);
+			return Convert.ToBoolean (_value, provider);
 		}
 
 		/// <summary>
@@ -242,7 +236,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>一个与实例等效的 8 位无符号整数，如果该实例为 null，则为零。</returns>
 		public byte ToByte ()
 		{
-			return this.ToByte (null);
+			return ToByte (null);
 		}
 
 		/// <summary>
@@ -253,7 +247,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		public byte ToByte (byte defaultValue)
 		{
 			byte result;
-			return byte.TryParse (this.Value, out result) ? result : defaultValue;
+			return byte.TryParse (Value, out result) ? result : defaultValue;
 		}
 
 		/// <summary>
@@ -263,7 +257,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>一个与实例等效的 8 位无符号整数，如果该实例为 null，则为零。</returns>
 		public byte ToByte (IFormatProvider provider)
 		{
-			return Convert.ToByte (this._value, provider);
+			return Convert.ToByte (_value, provider);
 		}
 
 		/// <summary>
@@ -272,7 +266,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>与实例中第一个且仅有的字符等效的 Unicode 字符。</returns>
 		public char ToChar ()
 		{
-			return this.ToChar (null);
+			return ToChar (null);
 		}
 
 		/// <summary>
@@ -283,7 +277,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		public char ToChar (char defaultValue)
 		{
 			char result;
-			return char.TryParse (this.Value, out result) ? result : defaultValue;
+			return char.TryParse (Value, out result) ? result : defaultValue;
 		}
 
 		/// <summary>
@@ -293,7 +287,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>与实例中第一个且仅有的字符等效的 Unicode 字符。</returns>
 		public char ToChar (IFormatProvider provider)
 		{
-			return Convert.ToChar (this._value, provider);
+			return Convert.ToChar (_value, provider);
 		}
 
 		/// <summary>
@@ -302,7 +296,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>实例的值的日期和时间等效项，如果 System.DateTime.MinValue 为该实例，则为 null 的日期和时间等效项。</returns>
 		public DateTime ToDateTime ()
 		{
-			return this.ToDateTime (null);
+			return ToDateTime (null);
 		}
 
 		/// <summary>
@@ -313,7 +307,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		public DateTime ToDateTime (DateTime defaultValue)
 		{
 			DateTime result;
-			return DateTime.TryParse (this.Value, out result) ? result : defaultValue;
+			return DateTime.TryParse (Value, out result) ? result : defaultValue;
 		}
 
 		/// <summary>
@@ -323,7 +317,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>实例的值的日期和时间等效项，如果 System.DateTime.MinValue 为该实例，则为 null 的日期和时间等效项。</returns>
 		public DateTime ToDateTime (IFormatProvider provider)
 		{
-			return Convert.ToDateTime (this._value, provider);
+			return Convert.ToDateTime (_value, provider);
 		}
 
 		/// <summary>
@@ -332,7 +326,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>与实例等效的十进制数，如果实例值为 null，则为 0（零）。</returns>
 		public decimal ToDecimal ()
 		{
-			return this.ToDecimal (null);
+			return ToDecimal (null);
 		}
 
 		/// <summary>
@@ -343,7 +337,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		public decimal ToDecimal (decimal defaultValue)
 		{
 			decimal result;
-			return decimal.TryParse (this.Value, out result) ? result : defaultValue;
+			return decimal.TryParse (Value, out result) ? result : defaultValue;
 		}
 
 		/// <summary>
@@ -353,7 +347,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>与实例等效的十进制数，如果实例值为 null，则为 0（零）。</returns>
 		public decimal ToDecimal (IFormatProvider provider)
 		{
-			return Convert.ToDecimal (this._value, provider);
+			return Convert.ToDecimal (_value, provider);
 		}
 
 		/// <summary>
@@ -362,7 +356,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>与实例中数字等效的双精度浮点数，如果实例为 null，则为 0（零）。</returns>
 		public double ToDouble ()
 		{
-			return this.ToDouble (null);
+			return ToDouble (null);
 		}
 
 		/// <summary>
@@ -373,7 +367,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		public double ToDouble (double defaultValue)
 		{
 			double result;
-			return double.TryParse (this.Value, out result) ? result : defaultValue;
+			return double.TryParse (Value, out result) ? result : defaultValue;
 		}
 
 		/// <summary>
@@ -383,7 +377,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>与实例中数字等效的双精度浮点数，如果实例为 null，则为 0（零）。</returns>
 		public double ToDouble (IFormatProvider provider)
 		{
-			return Convert.ToDouble (this._value, provider);
+			return Convert.ToDouble (_value, provider);
 		}
 
 		/// <summary>
@@ -392,7 +386,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>一个与实例中数字等效的 16 位带符号整数，如果实例为 null，则为 0（零）。</returns>
 		public short ToInt16 ()
 		{
-			return this.ToInt16 (null);
+			return ToInt16 (null);
 		}
 
 		/// <summary>
@@ -403,7 +397,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		public short ToInt16 (short defaultValue)
 		{
 			short result;
-			return short.TryParse (this.Value, out result) ? result : defaultValue;
+			return short.TryParse (Value, out result) ? result : defaultValue;
 		}
 
 		/// <summary>
@@ -413,7 +407,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>一个与实例中数字等效的 16 位带符号整数，如果实例为 null，则为 0（零）。</returns>
 		public short ToInt16 (IFormatProvider provider)
 		{
-			return Convert.ToInt16 (this._value, provider);
+			return Convert.ToInt16 (_value, provider);
 		}
 
 		/// <summary>
@@ -422,7 +416,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>一个与实例中数字等效的 32 位带符号整数，如果实例为 null，则为 0（零）。</returns>
 		public int ToInt32 ()
 		{
-			return this.ToInt32 (null);
+			return ToInt32 (null);
 		}
 
 		/// <summary>
@@ -433,7 +427,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		public int ToInt32 (int defaultValue)
 		{
 			int result;
-			return int.TryParse (this.Value, out result) ? result : defaultValue;
+			return int.TryParse (Value, out result) ? result : defaultValue;
 		}
 
 		/// <summary>
@@ -443,7 +437,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>一个与实例中数字等效的 32 位带符号整数，如果实例为 null，则为 0（零）。</returns>
 		public int ToInt32 (IFormatProvider provider)
 		{
-			return Convert.ToInt32 (this._value, provider);
+			return Convert.ToInt32 (_value, provider);
 		}
 
 		/// <summary>
@@ -452,7 +446,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>一个与实例中数字等效的 64 位带符号整数，如果实例为 null，则为 0（零）。</returns>
 		public long ToInt64 ()
 		{
-			return this.ToInt64 (null);
+			return ToInt64 (null);
 		}
 
 		/// <summary>
@@ -463,7 +457,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		public long ToInt64 (long defaultValue)
 		{
 			long result;
-			return long.TryParse (this.Value, out result) ? result : defaultValue;
+			return long.TryParse (Value, out result) ? result : defaultValue;
 		}
 
 		/// <summary>
@@ -473,7 +467,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>一个与实例中数字等效的 64 位带符号整数，如果实例为 null，则为 0（零）。</returns>
 		public long ToInt64 (IFormatProvider provider)
 		{
-			return Convert.ToInt64 (this._value, provider);
+			return Convert.ToInt64 (_value, provider);
 		}
 
 		/// <summary>
@@ -482,7 +476,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns> 一个与实例等效的 8 位带符号整数。</returns>
 		public sbyte ToSByte ()
 		{
-			return this.ToSByte (null);
+			return ToSByte (null);
 		}
 
 		/// <summary>
@@ -493,7 +487,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		public sbyte ToSByte (sbyte defaultValue)
 		{
 			sbyte result;
-			return sbyte.TryParse (this.Value, out result) ? result : defaultValue;
+			return sbyte.TryParse (Value, out result) ? result : defaultValue;
 		}
 
 		/// <summary>
@@ -503,7 +497,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns> 一个与实例等效的 8 位带符号整数。</returns>
 		public sbyte ToSByte (IFormatProvider provider)
 		{
-			return Convert.ToSByte (this._value, provider);
+			return Convert.ToSByte (_value, provider);
 		}
 
 		/// <summary>
@@ -512,7 +506,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>与实例中数字等效的单精度浮点数，如果实例为 null，则为 0（零）。</returns>
 		public float ToSingle ()
 		{
-			return this.ToSingle (null);
+			return ToSingle (null);
 		}
 
 		/// <summary>
@@ -523,7 +517,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		public float ToSingle (float defaultValue)
 		{
 			float result;
-			return float.TryParse (this.Value, out result) ? result : defaultValue;
+			return float.TryParse (Value, out result) ? result : defaultValue;
 		}
 
 		/// <summary>
@@ -533,7 +527,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>与实例中数字等效的单精度浮点数，如果实例为 null，则为 0（零）。</returns>
 		public float ToSingle (IFormatProvider provider)
 		{
-			return Convert.ToSingle (this._value, provider);
+			return Convert.ToSingle (_value, provider);
 		}
 
 		/// <summary>
@@ -542,7 +536,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns></returns>
 		public override string ToString ()
 		{
-			return this.ToString (null);
+			return ToString (null);
 		}
 
 		/// <summary>
@@ -552,7 +546,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns></returns>
 		public string ToString (IFormatProvider provider)
 		{
-			return this._value;
+			return _value;
 		}
 
 		/// <summary>
@@ -573,7 +567,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>一个对象，其类型为 conversionType，并且其值等效于实例。 - 或 - 实例，前提是 System.Type 的实例和 conversionType 相等。 - 或 - 如果 Nothing 为实例，并且 null 不是值类型，则为空引用（在 Visual Basic中为 conversionType）。</returns>
 		public object ToType (Type conversionType, IFormatProvider provider)
 		{
-			return Convert.ChangeType (this._value, conversionType, provider);
+			return Convert.ChangeType (_value, conversionType, provider);
 		}
 
 		/// <summary>
@@ -582,7 +576,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>一个与实例中数字等效的 16 位无符号整数，如果实例为 null，则为 0（零）。</returns>
 		public ushort ToUInt16 ()
 		{
-			return this.ToUInt16 (null);
+			return ToUInt16 (null);
 		}
 
 		/// <summary>
@@ -593,7 +587,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		public ushort ToUInt16 (ushort defaultValue)
 		{
 			ushort result;
-			return ushort.TryParse (this.Value, out result) ? result : defaultValue;
+			return ushort.TryParse (Value, out result) ? result : defaultValue;
 		}
 
 		/// <summary>
@@ -603,7 +597,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>一个与实例中数字等效的 16 位无符号整数，如果实例为 null，则为 0（零）。</returns>
 		public ushort ToUInt16 (IFormatProvider provider)
 		{
-			return Convert.ToUInt16 (this._value, provider);
+			return Convert.ToUInt16 (_value, provider);
 		}
 
 		/// <summary>
@@ -612,7 +606,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>一个与实例中数字等效的 32 位无符号整数，如果实例为 null，则为 0（零）。</returns>
 		public uint ToUInt32 ()
 		{
-			return this.ToUInt32 (null);
+			return ToUInt32 (null);
 		}
 
 		/// <summary>
@@ -623,7 +617,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		public uint ToUInt32 (uint defaultValue)
 		{
 			uint result;
-			return uint.TryParse (this.Value, out result) ? result : defaultValue;
+			return uint.TryParse (Value, out result) ? result : defaultValue;
 		}
 
 		/// <summary>
@@ -633,7 +627,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>一个与实例中数字等效的 32 位无符号整数，如果实例为 null，则为 0（零）。</returns>
 		public uint ToUInt32 (IFormatProvider provider)
 		{
-			return Convert.ToUInt32 (this._value, provider);
+			return Convert.ToUInt32 (_value, provider);
 		}
 
 		/// <summary>
@@ -642,7 +636,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>一个与实例中数字等效的 64 位无符号整数，如果实例为 null，则为 0（零）。</returns>
 		public ulong ToUInt64 ()
 		{
-			return this.ToUInt64 (null);
+			return ToUInt64 (null);
 		}
 
 		/// <summary>
@@ -653,7 +647,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		public ulong ToUInt64 (ulong defaultValue)
 		{
 			ulong result;
-			return ulong.TryParse (this.Value, out result) ? result : defaultValue;
+			return ulong.TryParse (Value, out result) ? result : defaultValue;
 		}
 
 		/// <summary>
@@ -663,7 +657,7 @@ namespace Native.Csharp.Tool.IniConfig.Linq
 		/// <returns>一个与实例中数字等效的 64 位无符号整数，如果实例为 null，则为 0（零）。</returns>
 		public ulong ToUInt64 (IFormatProvider provider)
 		{
-			return Convert.ToUInt64 (this._value, provider);
+			return Convert.ToUInt64 (_value, provider);
 		}
 		#endregion
 	}

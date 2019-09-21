@@ -1,10 +1,6 @@
-﻿using Native.Csharp.App.Interface;
+﻿using System.Collections;
+using Native.Csharp.App.Interface;
 using Native.Csharp.App.Model;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Native.Csharp.App.Event
 {
@@ -24,8 +20,8 @@ namespace Native.Csharp.App.Event
             e.Handled = LuaEnv.LuaEnv.RunLua(
                 "",
                 "envent/ReceiveFriendIncrease.lua",
-                new ArrayList() {
-                    "fromqq", e.FromQQ,
+                new ArrayList {
+                    "fromqq", e.FromQQ
                 });
 
 
@@ -45,10 +41,10 @@ namespace Native.Csharp.App.Event
             e.Handled = LuaEnv.LuaEnv.RunLua(
                 "",
                 "envent/ReceiveFriednAddRequest.lua",
-                new ArrayList() {
+                new ArrayList {
                     "fromqq", e.FromQQ,
                     "message",e.AppendMsg,
-                    "tag",e.Tag,
+                    "tag",e.Tag
                 });
             
             //e.Handled = false;   // 关于返回说明, 请参见 "Event_ReceiveMessage.ReceiveFriendMessage" 方法
@@ -67,10 +63,10 @@ namespace Native.Csharp.App.Event
             e.Handled = LuaEnv.LuaEnv.RunLua(
                 "",
                 "envent/ReceivePrivateMessage.lua",
-                new ArrayList() {
+                new ArrayList {
                     "fromqq", e.FromQQ,
                     "message",e.Msg,
-                    "id",e.MsgId,
+                    "id",e.MsgId
                 });
 			// e.Handled 相当于 原酷Q事件的返回值
 			// 如果要回复消息，请调用api发送，并且置 true - 截断本条消息，不再继续处理 //注意：应用优先级设置为"最高"(10000)时，不得置 true
