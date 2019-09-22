@@ -124,6 +124,7 @@
     <Compile Include="App\LuaEnv\TcpServer.cs" />
     <Compile Include="App\LuaEnv\TimerRun.cs" />
     <Compile Include="App\LuaEnv\Tools.cs" />
+    <Compile Include="App\LuaEnv\WebSocketManager.cs" />
     <Compile Include="App\LuaEnv\XmlApi.cs" />
     <Compile Include="App\Model\DiscussMessageEventArgs.cs" />
     <Compile Include="App\Model\EventArgsBase.cs" />

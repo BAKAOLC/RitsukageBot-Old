@@ -206,6 +206,11 @@ namespace Native.Csharp.App.LuaEnv {
             lua.RegisterFunction("apiXmlRow", null, typeof(XmlApi).GetMethod("xml_row"));
             //按结果查源头（反查）
 
+            //websocket
+            lua.RegisterFunction("createSocket", typeof(LuaApi).GetMethod("CreateSocket"));
+            lua.RegisterFunction("sendSocketMessage", typeof(LuaApi).GetMethod("SendSocketMessage"));
+            lua.RegisterFunction("stopSocket", typeof(LuaApi).GetMethod("StopSocket"));
+
             lua.DoFile(Common.AppDirectory + "lua/require/head.lua");
 
 
