@@ -31,7 +31,7 @@ namespace Native.Csharp.App.LuaEnv {
                         if (result.MessageType == WebSocketMessageType.Text) {
                             LuaEnv.RunLua(
                                 $"message=[[{Encoding.UTF8.GetString(seg.Array ?? new byte[0]).Replace("]", "] ")}]]",
-                                "event/ReceiveWebSocket.lua"
+                                "envent/ReceiveWebSocket.lua"
                             );
                         } else {
                             Common.CqApi.AddLoger(LogerLevel.Info, "WebSocket接受未知类型数据", $"WebSocket接受到{result.MessageType.ToString()}");
