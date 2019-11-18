@@ -96,13 +96,13 @@ namespace Native.Csharp.App.LuaEnv {
             //获取当前登录QQ的昵称
             lua.RegisterFunction("cqAppDirectory", null, typeof(LuaApi).GetMethod("GetAppDirectory"));
             //取应用目录
-            //lua.RegisterFunction("cqGetQQInfo", null, typeof(LuaApi).GetMethod("GetQQInfo"));
+            lua.RegisterFunction("cqGetQQInfo", null, typeof(LuaApi).GetMethod("GetQQInfo"));
             //获取QQ账户信息
             lua.RegisterFunction("cqGetMemberInfo", null, typeof(LuaApi).GetMethod("GetMemberInfo"));
             //获取群成员信息
-            //lua.RegisterFunction("cqGetMemberList", null, typeof(LuaApi).GetMethod("GetMemberList"));
+            lua.RegisterFunction("cqGetMemberList", null, typeof(LuaApi).GetMethod("GetMemberList"));
             //获取群成员列表
-            //lua.RegisterFunction("cqGetGroupList", null, typeof(LuaApi).GetMethod("GetGroupList"));
+            lua.RegisterFunction("cqGetGroupList", null, typeof(LuaApi).GetMethod("GetGroupList"));
             //获取群列表
             lua.RegisterFunction("cqAddLoger", null, typeof(LuaApi).GetMethod("AddLoger"));
             //添加日志

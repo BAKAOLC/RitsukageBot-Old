@@ -415,6 +415,20 @@ namespace Native.Csharp.App.LuaEnv
         //获取当前登录QQ的昵称
         public static string GetAppDirectory() => Common.AppDirectory;
         //取应用目录
+        public static LuaTable GetQQInfo(LuaTable t, long q, bool a)
+        {
+            // 当地时区
+            DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));
+
+            QQ m;
+            Common.CqApi.GetQQInfo(q, out m, a);
+            t["Id"] = m.Id;
+            t["Nick"] = m.Nick;
+            t["Sex"] = (int)m.Sex;
+            t["Age"] = m.Age;
+            return t;
+        }
+        //获取用户信息
         public static LuaTable GetMemberInfo(LuaTable t, long g, long q, bool a)
         {
             // 当地时区
@@ -437,6 +451,49 @@ namespace Native.Csharp.App.LuaEnv
             return t;
         }
         //获取群成员信息
+        public static LuaTable GetGroupList(LuaTable t) {
+            List<Group> g;
+            Common.CqApi.GetGroupList(out g);
+            long index = 1;
+            foreach (var group in g)
+            {
+                t[index] = group.Id;
+                t[index + 1] = group.Name;
+                index += 2;
+            }
+            return t;
+        }
+        //获取群列表
+        public static LuaTable GetMemberList(LuaTable t, long g)
+        {
+            // 当地时区
+            DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));
+
+            List<GroupMember> m;
+            Common.CqApi.GetMemberList(g, out m);
+            long index = 1;
+            foreach (var member in m)
+            {
+                t[index] = member.GroupId;
+                t[index + 1] = member.QQId;
+                t[index + 2] = member.Nick;
+                t[index + 3] = member.Card;
+                t[index + 4] = (int)member.Sex;
+                t[index + 5] = member.Age;
+                t[index + 6] = member.Area;
+                t[index + 7] = (long)(member.JoiningTime - startTime).TotalSeconds;
+                t[index + 8] = (long)(member.LastDateTime - startTime).TotalSeconds;
+                t[index + 9] = member.Level;
+                t[index + 10] = (int)member.PermitType;
+                t[index + 11] = member.SpecialTitle;
+                t[index + 12] = (long)(member.SpecialTitleDurationTime - startTime).TotalSeconds;
+                t[index + 13] = member.BadRecord;
+                t[index + 14] = member.CanModifiedCard;
+                index += 15;
+            }
+            return t;
+        }
+        //获取群成员列表
         public static int AddLoger(int level, string type, string content) => Common.CqApi.AddLoger((LogerLevel)level, type, content);
         //添加日志
         public static int AddFatalError(string msg) => Common.CqApi.AddFatalError(msg);
