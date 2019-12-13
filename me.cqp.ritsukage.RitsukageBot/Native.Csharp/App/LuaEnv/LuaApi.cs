@@ -143,8 +143,9 @@ namespace Native.Csharp.App.LuaEnv
         /// <param name="Url">文件网址</param>
         /// <param name="fileName">路径</param>
         /// <param name="timeout">超时时间</param>
+        /// <param name="referer">发起页面</param>
         /// <returns>下载结果</returns>
-        public static bool HttpDownload(string Url, string fileName, int timeout = 5000)
+        public static bool HttpDownload(string Url, string fileName, int timeout = 5000, string referer = "")
         {
             //fileName = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "data/" + fileName;
             try
@@ -163,6 +164,9 @@ namespace Native.Csharp.App.LuaEnv
                 request.Timeout = timeout;
                 request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36 Vivaldi/2.2.1388.37";
 
+                if (referer != "")
+                    request.Referer = referer;
+
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                 if (response.ContentLength < 1024 * 1024 * 20)//超过20M的文件不下载
                 {
@@ -177,13 +181,11 @@ namespace Native.Csharp.App.LuaEnv
             return false;
         }
 
-
-
         /// <summary>
         /// GET 请求与获取结果
         /// </summary>
         public static string HttpGet(string Url, string postDataStr = "", int timeout = 5000,
-            string cookie = "")
+            string cookie = "", string referer = "")
         {
             try
             {
@@ -203,6 +205,9 @@ namespace Native.Csharp.App.LuaEnv
                 request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36 Vivaldi/2.2.1388.37";
                 if (cookie != "")
                     request.Headers.Add("cookie", cookie);
+
+                if (referer != "")
+                    request.Referer = referer;
 
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                 string encoding = response.ContentEncoding;
@@ -230,7 +235,7 @@ namespace Native.Csharp.App.LuaEnv
         /// POST请求与获取结果
         /// </summary>
         public static string HttpPost(string Url, string postDataStr, int timeout = 5000,
-            string cookie = "",string contentType = "application/x-www-form-urlencoded")
+            string cookie = "",string contentType = "application/x-www-form-urlencoded", string referer = "")
         {
             try
             {
@@ -253,6 +258,9 @@ namespace Native.Csharp.App.LuaEnv
                 if (cookie != "")
                     request.Headers.Add("cookie", cookie);
 
+                if (referer != "")
+                    request.Referer = referer;
+
                 Stream stream = request.GetRequestStream();
                 stream.Write(byteResquest, 0, byteResquest.Length);
                 stream.Close();
@@ -269,6 +277,131 @@ namespace Native.Csharp.App.LuaEnv
             catch (Exception e)
             {
                 Common.CqApi.AddLoger(LogerLevel.Error, "post错误", e.ToString());
+            }
+            return "";
+        }
+
+        /// <summary>
+        /// 网络请求
+        /// </summary>
+        public static HttpWebRequest OHTTPCreateRequest(string Url, string postDataStr = "")
+        {
+            //请求前设置一下使用的安全协议类型 System.Net
+            if (Url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
+            {
+                ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, errors) =>
+                {
+                    return true; //总是接受
+                    };
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+            }
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url + (postDataStr == "" ? "" : "?") + postDataStr);
+
+            request.Method = "GET";
+            request.ContentType = "text/html;charset=UTF-8";
+            request.Timeout = 5000;
+            request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36 Vivaldi/2.2.1388.37";
+
+            return request;
+        }
+
+        public static bool OHTTPSetMethod(HttpWebRequest request, string method = "")
+        {
+            if (method != "")
+            {
+                request.Method = method;
+                return true;
+            }
+            return false;
+        }
+
+        public static bool OHTTPSetTimeout(HttpWebRequest request, int timeout = 5000)
+        {
+            if (timeout > 0)
+            {
+                request.Timeout = timeout;
+                return true;
+            }
+            return false;
+        }
+
+        public static bool OHTTPContentType(HttpWebRequest request, string contentType = "")
+        {
+            if (contentType != "")
+            {
+                request.ContentType = contentType;
+                return true;
+            }
+            return false;
+        }
+
+        public static bool OHTTPUserAgent(HttpWebRequest request, string userAgent = "")
+        {
+            if (userAgent != "")
+            {
+                request.UserAgent = userAgent;
+                return true;
+            }
+            return false;
+        }
+
+        public static bool OHTTPSetCookie(HttpWebRequest request, string cookie = "")
+        {
+            if (cookie != "")
+            {
+                request.Headers.Add("cookie", cookie);
+                return true;
+            }
+            return false;
+        }
+
+        public static bool OHTTPSetReferer(HttpWebRequest request, string referer = "")
+        {
+            if (referer != "")
+            {
+                request.Referer = referer;
+                return true;
+            }
+            return false;
+        }
+
+        public static bool OHTTPSetPOSTData(HttpWebRequest request, string postDataStr = "")
+        {
+            if (request.Method != "POST")
+            {
+                return false;
+            }
+            byte[] byteResquest = Encoding.UTF8.GetBytes(postDataStr);
+            Stream stream = request.GetRequestStream();
+            stream.Write(byteResquest, 0, byteResquest.Length);
+            stream.Close();
+            return true;
+        }
+
+        public static string OHTTPGetResponse(HttpWebRequest request)
+        {
+            try
+            {
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                string encoding = response.ContentEncoding;
+                if (encoding == null || encoding.Length < 1)
+                {
+                    encoding = "UTF-8"; //默认编码
+                }
+
+                Stream myResponseStream = response.GetResponseStream();
+                StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding(encoding));
+                string retString = myStreamReader.ReadToEnd();
+                if (request.Method == "GET")
+                {
+                    myStreamReader.Close();
+                    myResponseStream.Close();
+                }
+                return retString;
+            }
+            catch (Exception e)
+            {
+                Common.CqApi.AddLoger(LogerLevel.Error, "web错误", e.ToString());
             }
             return "";
         }

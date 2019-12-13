@@ -159,6 +159,16 @@ namespace Native.Csharp.App.LuaEnv {
             lua.RegisterFunction("apiHttpGet", null, typeof(LuaApi).GetMethod("HttpGet"));
             //GET 请求与获取结果
             lua.RegisterFunction("apiHttpPost", null, typeof(LuaApi).GetMethod("HttpPost"));
+
+            lua.RegisterFunction("OHTTPCreateRequest", null, typeof(LuaApi).GetMethod("OHTTPCreateRequest"));
+            lua.RegisterFunction("OHTTPSetMethod", null, typeof(LuaApi).GetMethod("OHTTPSetMethod"));
+            lua.RegisterFunction("OHTTPSetTimeout", null, typeof(LuaApi).GetMethod("OHTTPSetTimeout"));
+            lua.RegisterFunction("OHTTPContentType", null, typeof(LuaApi).GetMethod("OHTTPContentType"));
+            lua.RegisterFunction("OHTTPUserAgent", null, typeof(LuaApi).GetMethod("OHTTPUserAgent"));
+            lua.RegisterFunction("OHTTPSetCookie", null, typeof(LuaApi).GetMethod("OHTTPSetCookie"));
+            lua.RegisterFunction("OHTTPSetReferer", null, typeof(LuaApi).GetMethod("OHTTPSetReferer"));
+            lua.RegisterFunction("OHTTPGetResponse", null, typeof(LuaApi).GetMethod("OHTTPGetResponse"));
+
             //POST 请求与获取结果
             lua.RegisterFunction("apiBase64File", null, typeof(LuaApi).GetMethod("Base64File"));
             //获取在线文件的base64结果
