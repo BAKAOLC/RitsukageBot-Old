@@ -181,7 +181,7 @@ namespace Native.Csharp.App.LuaEnv
             }
             catch (Exception ex)
             {
-                return ex.ToString();
+                return "error: " + ex.ToString();
             }
             return "";
         }

@@ -10,6 +10,7 @@ using System.Diagnostics;
 using Native.Csharp.Sdk.Cqp.Enum;
 using Native.Csharp.Sdk.Cqp.Model;
 using NLua;
+using MySql.Data.MySqlClient;
 
 namespace Native.Csharp.App.LuaEnv
 {
@@ -551,9 +552,136 @@ namespace Native.Csharp.App.LuaEnv
         /// <summary>
         /// MySQL
         /// </summary>
-        public static bool MySQLSet(string host, int post, string username, string password)
+        public static string SetMySQL(string host, int post, string username, string password, string database)
         {
-            return MySQLHelper.Set(host, post, username, password);
+            return MySQLHelper.Set(host, post, username, password, database);
+        }
+
+        public static string ConnectMySQL()
+        {
+            return MySQLHelper.Connect();
+        }
+
+        public static string DisconnectMySQL()
+        {
+            return MySQLHelper.Disconnect();
+        }
+
+        public static string MySQLDoCommand(string command)
+        {
+            return MySQLHelper.DoSQLCommand(command);
+        }
+
+        public static MySqlDataReader GetMySQLLastDataReader()
+        {
+            return MySQLHelper.GetLastDataReader();
+        }
+
+        public static bool MySQLDataReaderNextLine(MySqlDataReader reader)
+        {
+            return reader.Read();
+        }
+
+        
+        public static bool MySQLDataReaderCheckEmptyByColumn(MySqlDataReader reader, int column)
+        {
+            return reader.IsDBNull(column);
+        }
+
+        public static string MySQLDataReaderGetNameByColumn(MySqlDataReader reader, int column)
+        {
+            return reader.GetName(column);
+        }
+
+        public static bool MySQLDataReaderGetBooleanByName(MySqlDataReader reader, string name)
+        {
+            return reader.GetBoolean(name);
+        }
+        public static bool MySQLDataReaderGetBooleanByColumn(MySqlDataReader reader, int column)
+        {
+            return reader.GetBoolean(column);
+        }
+        public static byte MySQLDataReaderGetByteByName(MySqlDataReader reader, string name)
+        {
+            return reader.GetByte(name);
+        }
+        public static byte MySQLDataReaderGetByteByColumn(MySqlDataReader reader, int column)
+        {
+            return reader.GetByte(column);
+        }
+        public static char MySQLDataReaderGetCharByName(MySqlDataReader reader, string name)
+        {
+            return reader.GetChar(name);
+        }
+        public static char MySQLDataReaderGetCharByColumn(MySqlDataReader reader, int column)
+        {
+            return reader.GetChar(column);
+        }
+        public static short MySQLDataReaderGetInt16ByName(MySqlDataReader reader, string name)
+        {
+            return reader.GetInt16(name);
+        }
+        public static short MySQLDataReaderGetInt16ByColumn(MySqlDataReader reader, int column)
+        {
+            return reader.GetInt16(column);
+        }
+        public static int MySQLDataReaderGetInt32ByName(MySqlDataReader reader, string name)
+        {
+            return reader.GetInt32(name);
+        }
+        public static int MySQLDataReaderGetInt32ByColumn(MySqlDataReader reader, int column)
+        {
+            return reader.GetInt32(column);
+        }
+        public static long MySQLDataReaderGetInt64ByName(MySqlDataReader reader, string name)
+        {
+            return reader.GetInt64(name);
+        }
+        public static long MySQLDataReaderGetInt64ByColumn(MySqlDataReader reader, int column)
+        {
+            return reader.GetInt64(column);
+        }
+        public static ushort MySQLDataReaderGetUInt16ByNameByName(MySqlDataReader reader, string name)
+        {
+            return reader.GetUInt16(name);
+        }
+        public static ushort MySQLDataReaderGetUInt16ByColumn(MySqlDataReader reader, int column)
+        {
+            return reader.GetUInt16(column);
+        }
+        public static uint MySQLDataReaderGetUInt32ByName(MySqlDataReader reader, string name)
+        {
+            return reader.GetUInt32(name);
+        }
+        public static uint MySQLDataReaderGetUInt32ByColumn(MySqlDataReader reader, int column)
+        {
+            return reader.GetUInt32(column);
+        }
+        public static ulong MySQLDataReaderGetUInt64ByName(MySqlDataReader reader, string name)
+        {
+            return reader.GetUInt64(name);
+        }
+        public static ulong MySQLDataReaderGetUInt64ByColumn(MySqlDataReader reader, int column)
+        {
+            return reader.GetUInt64(column);
+        }
+
+        public static string MySQLDataReaderGetDateTimeByName(MySqlDataReader reader, string name)
+        {
+            return reader.GetDateTime(name).ToString();
+        }
+        public static string MySQLDataReaderGetDateTimeByColumn(MySqlDataReader reader, int column)
+        {
+            return reader.GetDateTime(column).ToString();
+        }
+
+        public static string MySQLDataReaderGetStringByName(MySqlDataReader reader, string name)
+        {
+            return reader.GetString(name);
+        }
+        public static string MySQLDataReaderGetStringByColumn(MySqlDataReader reader, int column)
+        {
+            return reader.GetString(column);
         }
 
         public static string CqCode_At(long qq) => Common.CqApi.CqCode_At(qq);

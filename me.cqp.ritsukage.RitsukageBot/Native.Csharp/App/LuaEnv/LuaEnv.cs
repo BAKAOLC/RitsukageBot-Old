@@ -171,7 +171,38 @@ namespace Native.Csharp.App.LuaEnv {
 
             lua.RegisterFunction("Execute", null, typeof(LuaApi).GetMethod("Execute"));
 
-            lua.RegisterFunction("MySQLSet", null, typeof(LuaApi).GetMethod("MySQLSet"));
+            lua.RegisterFunction("SetMySQL", null, typeof(LuaApi).GetMethod("SetMySQL"));
+            lua.RegisterFunction("ConnectMySQL", null, typeof(LuaApi).GetMethod("ConnectMySQL"));
+            lua.RegisterFunction("DisconnectMySQL", null, typeof(LuaApi).GetMethod("DisconnectMySQL"));
+            lua.RegisterFunction("MySQLDoCommand", null, typeof(LuaApi).GetMethod("MySQLDoCommand"));
+            lua.RegisterFunction("GetMySQLLastDataReader", null, typeof(LuaApi).GetMethod("GetMySQLLastDataReader"));
+            /*
+            lua.RegisterFunction("MySQLDataReaderNextLine", null, typeof(LuaApi).GetMethod("MySQLDataReaderNextLine"));
+            lua.RegisterFunction("MySQLDataReaderCheckEmptyByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderCheckEmptyByColumn"));
+            lua.RegisterFunction("MySQLDataReaderGetNameByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetNameByColumn"));
+            lua.RegisterFunction("MySQLDataReaderGetBooleanByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetBooleanByName"));
+            lua.RegisterFunction("MySQLDataReaderGetBooleanByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetBooleanByColumn"));
+            lua.RegisterFunction("MySQLDataReaderGetByteByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetByteByName"));
+            lua.RegisterFunction("MySQLDataReaderGetByteByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetByteByColumn"));
+            lua.RegisterFunction("MySQLDataReaderGetCharByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetCharByName"));
+            lua.RegisterFunction("MySQLDataReaderGetCharByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetCharByColumn"));
+            lua.RegisterFunction("MySQLDataReaderGetInt16ByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetInt16ByName"));
+            lua.RegisterFunction("MySQLDataReaderGetInt16ByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetInt16ByColumn"));
+            lua.RegisterFunction("MySQLDataReaderGetInt32ByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetInt32ByName"));
+            lua.RegisterFunction("MySQLDataReaderGetInt32ByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetInt32ByColumn"));
+            lua.RegisterFunction("MySQLDataReaderGetInt64ByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetInt64ByName"));
+            lua.RegisterFunction("MySQLDataReaderGetInt64ByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetInt64ByColumn"));
+            //lua.RegisterFunction("MySQLDataReaderGetUInt16ByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetUInt16ByName"));
+            //lua.RegisterFunction("MySQLDataReaderGetUInt16ByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetUInt16ByColumn"));
+            //lua.RegisterFunction("MySQLDataReaderGetUInt32ByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetUInt32ByName"));
+            //lua.RegisterFunction("MySQLDataReaderGetUInt32ByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetUInt32ByColumn"));
+            //lua.RegisterFunction("MySQLDataReaderGetUInt64ByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetUInt64ByName"));
+            //lua.RegisterFunction("MySQLDataReaderGetUInt64ByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetUInt64ByColumn"));
+            lua.RegisterFunction("MySQLDataReaderGetDateTimeByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetDateTimeByName"));
+            lua.RegisterFunction("MySQLDataReaderGetDateTimeByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetDateTimeByColumn"));
+            lua.RegisterFunction("MySQLDataReaderGetStringByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetStringByName"));
+            lua.RegisterFunction("MySQLDataReaderGetStringByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetStringByColumn"));
+            */
 
             //POST 请求与获取结果
             lua.RegisterFunction("apiBase64File", null, typeof(LuaApi).GetMethod("Base64File"));
