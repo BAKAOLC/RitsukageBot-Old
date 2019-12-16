@@ -6,6 +6,7 @@ using System.Drawing.Text;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Diagnostics;
 using Native.Csharp.Sdk.Cqp.Enum;
 using Native.Csharp.Sdk.Cqp.Model;
 using NLua;
@@ -235,7 +236,7 @@ namespace Native.Csharp.App.LuaEnv
         /// POST请求与获取结果
         /// </summary>
         public static string HttpPost(string Url, string postDataStr, int timeout = 5000,
-            string cookie = "",string contentType = "application/x-www-form-urlencoded", string referer = "")
+            string cookie = "", string contentType = "application/x-www-form-urlencoded", string referer = "")
         {
             try
             {
@@ -292,7 +293,7 @@ namespace Native.Csharp.App.LuaEnv
                 ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, errors) =>
                 {
                     return true; //总是接受
-                    };
+                };
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
             }
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url + (postDataStr == "" ? "" : "?") + postDataStr);
@@ -473,7 +474,7 @@ namespace Native.Csharp.App.LuaEnv
         /// </summary>
         /// <param name="n"></param>
         /// <param name="d"></param>
-        public static void SetVar(string n,string d)
+        public static void SetVar(string n, string d)
         {
             luaTemp[n] = d;
         }
@@ -482,7 +483,8 @@ namespace Native.Csharp.App.LuaEnv
         /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
-        public static string GetVar(string n) {
+        public static string GetVar(string n)
+        {
             if (luaTemp.ContainsKey(n))
                 return luaTemp[n];
             return "";
@@ -503,6 +505,56 @@ namespace Native.Csharp.App.LuaEnv
         /// </summary>
         /// <param name="wait"></param>
         public static void SetTimerScriptWait(int wait) => TimerRun.luaWait = wait;
+
+        public static string Execute(string shell)
+        {
+            string rText = "";
+
+            void receive(object sender, DataReceivedEventArgs e)
+            {
+                if (!String.IsNullOrEmpty(e.Data))
+                {
+                    rText += e.Data + "\n";
+                }
+            }
+
+            try
+            {
+                Process p = new Process();
+                p.StartInfo.FileName = "cmd";
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardInput = true;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.RedirectStandardError = true;
+                p.StartInfo.CreateNoWindow = true;
+                p.OutputDataReceived += receive;
+                p.Start();
+                StreamWriter w = p.StandardInput;
+                p.BeginOutputReadLine();
+                if (!String.IsNullOrEmpty(shell))
+                {
+                    w.WriteLine(shell);
+                }
+                w.Close();
+                p.WaitForExit();
+                p.Close();
+                return rText;
+            }
+            catch (Exception ex)
+            {
+                Common.CqApi.AddLoger(LogerLevel.Error, "shell错误", ex.ToString());
+            }
+
+            return "";
+        }
+
+        /// <summary>
+        /// MySQL
+        /// </summary>
+        public static bool MySQLSet(string host, int post, string username, string password)
+        {
+            return MySQLHelper.Set(host, post, username, password);
+        }
 
         public static string CqCode_At(long qq) => Common.CqApi.CqCode_At(qq);
         //获取酷Q "At某人" 代码
@@ -584,7 +636,8 @@ namespace Native.Csharp.App.LuaEnv
             return t;
         }
         //获取群成员信息
-        public static LuaTable GetGroupList(LuaTable t) {
+        public static LuaTable GetGroupList(LuaTable t)
+        {
             List<Group> g;
             Common.CqApi.GetGroupList(out g);
             long index = 1;
@@ -633,7 +686,7 @@ namespace Native.Csharp.App.LuaEnv
         //添加致命错误提示
         public static int SetGroupWholeBanSpeak(long groupId, bool isOpen) => Common.CqApi.SetGroupWholeBanSpeak(groupId, isOpen);
         //置全群禁言
-        public static int SetFriendAddRequest(string tag,int respond,string msg) => Common.CqApi.SetFriendAddRequest(tag, (ResponseType)respond, msg);
+        public static int SetFriendAddRequest(string tag, int respond, string msg) => Common.CqApi.SetFriendAddRequest(tag, (ResponseType)respond, msg);
         //置好友添加请求
         public static int SetGroupAddRequest(string tag, int request, int respond, string msg) => Common.CqApi.SetGroupAddRequest(tag, (RequestType)request, (ResponseType)respond, msg);
         //置群添加请求

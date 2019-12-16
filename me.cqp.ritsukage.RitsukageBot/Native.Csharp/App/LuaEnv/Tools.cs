@@ -156,7 +156,7 @@ namespace Native.Csharp.App.LuaEnv
         /// </summary>
         /// <param name="sourceDirPath">源文件夹目录</param>
         /// <param name="saveDirPath">指定文件夹目录</param>
-        public static void CopyDirectory(string sourceDirPath, string saveDirPath)
+        public static string CopyDirectory(string sourceDirPath, string saveDirPath)
         {
             try
             {
@@ -181,8 +181,9 @@ namespace Native.Csharp.App.LuaEnv
             }
             catch (Exception ex)
             {
-
+                return ex.ToString();
             }
+            return "";
         }
 
 

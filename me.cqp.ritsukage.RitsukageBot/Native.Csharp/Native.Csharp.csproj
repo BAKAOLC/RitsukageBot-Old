@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\ModuleInit.Fody.2.0.0\build\ModuleInit.Fody.props" Condition="Exists('..\packages\ModuleInit.Fody.2.0.0\build\ModuleInit.Fody.props')" />
   <Import Project="..\packages\LibGit2Sharp.NativeBinaries.1.0.205\build\LibGit2Sharp.NativeBinaries.props" Condition="Exists('..\packages\LibGit2Sharp.NativeBinaries.1.0.205\build\LibGit2Sharp.NativeBinaries.props')" />
   <Import Project="..\packages\Costura.Fody.4.0.0\build\Costura.Fody.props" Condition="Exists('..\packages\Costura.Fody.4.0.0\build\Costura.Fody.props')" />
-  <Import Project="..\packages\ModuleInit.Fody.2.0.0\build\ModuleInit.Fody.props" Condition="Exists('..\packages\ModuleInit.Fody.2.0.0\build\ModuleInit.Fody.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -12,7 +12,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Native.Csharp</RootNamespace>
     <AssemblyName>me.cqp.ritsukage.RitsukageBot</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
@@ -52,8 +52,11 @@
     <DllExportPeCheck>2</DllExportPeCheck>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.3.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\packages\BouncyCastle.1.8.3.1\lib\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
     <Reference Include="CommonServiceLocator, Version=2.0.3.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.5.8.6\lib\net40\CommonServiceLocator.dll</HintPath>
+      <HintPath>..\packages\Unity.5.8.6\lib\net45\CommonServiceLocator.dll</HintPath>
     </Reference>
     <Reference Include="Costura, Version=4.0.0.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
       <HintPath>..\packages\Costura.Fody.4.0.0\lib\net40\Costura.dll</HintPath>
@@ -63,22 +66,41 @@
       <Private>False</Private>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="KeraLua, Version=1.0.7.0, Culture=neutral, PublicKeyToken=6a194c04b9c89217, processorArchitecture=MSIL">
-      <HintPath>..\packages\KeraLua.1.0.7\lib\net45\KeraLua.dll</HintPath>
+    <Reference Include="Google.Protobuf, Version=3.6.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Protobuf.3.6.1\lib\net45\Google.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="KeraLua, Version=1.0.22.0, Culture=neutral, PublicKeyToken=6a194c04b9c89217, processorArchitecture=MSIL">
+      <HintPath>..\packages\KeraLua.1.0.22\lib\net45\KeraLua.dll</HintPath>
     </Reference>
     <Reference Include="LibGit2Sharp, Version=0.24.1.0, Culture=neutral, PublicKeyToken=7cbde695407f0333, processorArchitecture=MSIL">
       <HintPath>..\packages\LibGit2Sharp.0.24.1\lib\net40\LibGit2Sharp.dll</HintPath>
     </Reference>
-    <Reference Include="NLua, Version=1.4.14.0, Culture=neutral, PublicKeyToken=6a194c04b9c89217, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLua.1.4.14\lib\net45\NLua.dll</HintPath>
+    <Reference Include="ModuleInit, Version=2.0.0.0, Culture=neutral, PublicKeyToken=409b3227471b0f0d, processorArchitecture=MSIL">
+      <HintPath>..\packages\ModuleInit.Fody.2.0.0\lib\net452\ModuleInit.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data, Version=8.0.18.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.8.0.18\lib\net452\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="NLua, Version=1.4.25.0, Culture=neutral, PublicKeyToken=6a194c04b9c89217, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLua.1.4.25\lib\net45\NLua.dll</HintPath>
+    </Reference>
+    <Reference Include="Renci.SshNet, Version=2016.1.0.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL">
+      <HintPath>..\packages\SSH.NET.2016.1.0\lib\net40\Renci.SshNet.dll</HintPath>
     </Reference>
     <Reference Include="SimpleTCP, Version=1.0.24.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SimpleTCP.1.0.24\lib\net45\SimpleTCP.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -86,16 +108,25 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Unity.Abstractions, Version=3.3.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.5.8.6\lib\net40\Unity.Abstractions.dll</HintPath>
+      <HintPath>..\packages\Unity.5.8.6\lib\net45\Unity.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Configuration, Version=5.2.1.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.8.6\lib\net45\Unity.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Container, Version=5.8.6.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.5.8.6\lib\net40\Unity.Container.dll</HintPath>
+      <HintPath>..\packages\Unity.5.8.6\lib\net45\Unity.Container.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Interception, Version=5.5.1.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.5.8.6\lib\net40\Unity.Interception.dll</HintPath>
+      <HintPath>..\packages\Unity.5.8.6\lib\net45\Unity.Interception.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Interception.Configuration, Version=5.1.4.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.8.6\lib\net45\Unity.Interception.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RegistrationByConvention, Version=2.1.5.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.8.6\lib\net45\Unity.RegistrationByConvention.dll</HintPath>
     </Reference>
     <Reference Include="Unity.ServiceLocation, Version=2.1.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.5.8.6\lib\net40\Unity.ServiceLocation.dll</HintPath>
+      <HintPath>..\packages\Unity.5.8.6\lib\net45\Unity.ServiceLocation.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -119,6 +150,7 @@
     <Compile Include="App\Interface\IEvent_GroupMessage.cs" />
     <Compile Include="App\Interface\IEvent_OtherMessage.cs" />
     <Compile Include="App\Interface\IEvent_UserExpand.cs" />
+    <Compile Include="App\LuaEnv\MySQL.cs" />
     <Compile Include="App\LuaEnv\LuaApi.cs" />
     <Compile Include="App\LuaEnv\LuaEnv.cs" />
     <Compile Include="App\LuaEnv\TcpServer.cs" />
@@ -181,7 +213,7 @@
   <ImportGroup Label=".NET DllExport">
     <Import Project="$(SolutionDir)packages\DllExport.1.6.1\tools\net.r_eg.DllExport.targets" Condition="Exists('$(SolutionDir)packages\DllExport.1.6.1\tools\net.r_eg.DllExport.targets')" Label="8337224c9ad9e356" />
     <Import Project="..\packages\Fody.5.0.5\build\Fody.targets" Condition="Exists('..\packages\Fody.5.0.5\build\Fody.targets')" />
-    <Import Project="..\packages\KeraLua.1.0.7\build\net45\KeraLua.targets" Condition="Exists('..\packages\KeraLua.1.0.7\build\net45\KeraLua.targets')" />
+    <Import Project="..\packages\KeraLua.1.0.22\build\net45\KeraLua.targets" Condition="Exists('..\packages\KeraLua.1.0.22\build\net45\KeraLua.targets')" />
   </ImportGroup>
   <Target Name="DllExportRestorePkg" BeforeTargets="PrepareForBuild">
     <Warning Condition="!Exists('$(SolutionDir)DllExport.bat')" Text="We can't find 'DllExport.bat' in '$(SolutionDir)' - https://github.com/3F/DllExport" />
@@ -189,16 +221,6 @@
   </Target>
   <Target Name="DllExportRPkgDynamicImport" BeforeTargets="PostBuildEvent" DependsOnTargets="GetFrameworkPaths" Condition="'$(DllExportModImported)' != 'true' And '$(DllExportRPkgDyn)' != 'false'">
     <MSBuild BuildInParallel="true" UseResultsCache="true" Projects="$(MSBuildProjectFullPath)" Properties="DllExportRPkgDyn=true" Targets="Build" />
-  </Target>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Fody.5.0.5\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.5.0.5\build\Fody.targets'))" />
-    <Error Condition="!Exists('..\packages\ModuleInit.Fody.2.0.0\build\ModuleInit.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ModuleInit.Fody.2.0.0\build\ModuleInit.Fody.props'))" />
-    <Error Condition="!Exists('..\packages\Costura.Fody.4.0.0\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.4.0.0\build\Costura.Fody.props'))" />
-    <Error Condition="!Exists('..\packages\KeraLua.1.0.7\build\net45\KeraLua.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\KeraLua.1.0.7\build\net45\KeraLua.targets'))" />
-    <Error Condition="!Exists('..\packages\LibGit2Sharp.NativeBinaries.1.0.205\build\LibGit2Sharp.NativeBinaries.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\LibGit2Sharp.NativeBinaries.1.0.205\build\LibGit2Sharp.NativeBinaries.props'))" />
   </Target>
   <PropertyGroup>
     <PostBuildEvent>if exist "$(TargetDir)$(TargetName).dll" (
@@ -215,4 +237,14 @@ rename "$(TargetDir)$(TargetName)\$(TargetName).json" "app.json"
 if exist "$(TargetDir)$(TargetName)\app.dll" (del /F /A /Q "$(TargetDir)$(TargetName)\app.dll") 
 if exist "$(TargetDir)$(TargetName)\app.json" (del /F /A /Q "$(TargetDir)$(TargetName)\app.json")</PreBuildEvent>
   </PropertyGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Fody.5.0.5\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.5.0.5\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\Costura.Fody.4.0.0\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.4.0.0\build\Costura.Fody.props'))" />
+    <Error Condition="!Exists('..\packages\LibGit2Sharp.NativeBinaries.1.0.205\build\LibGit2Sharp.NativeBinaries.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\LibGit2Sharp.NativeBinaries.1.0.205\build\LibGit2Sharp.NativeBinaries.props'))" />
+    <Error Condition="!Exists('..\packages\ModuleInit.Fody.2.0.0\build\ModuleInit.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ModuleInit.Fody.2.0.0\build\ModuleInit.Fody.props'))" />
+    <Error Condition="!Exists('..\packages\KeraLua.1.0.22\build\net45\KeraLua.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\KeraLua.1.0.22\build\net45\KeraLua.targets'))" />
+  </Target>
 </Project>

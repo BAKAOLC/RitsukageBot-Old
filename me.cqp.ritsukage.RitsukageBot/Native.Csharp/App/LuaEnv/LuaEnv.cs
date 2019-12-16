@@ -169,6 +169,10 @@ namespace Native.Csharp.App.LuaEnv {
             lua.RegisterFunction("OHTTPSetReferer", null, typeof(LuaApi).GetMethod("OHTTPSetReferer"));
             lua.RegisterFunction("OHTTPGetResponse", null, typeof(LuaApi).GetMethod("OHTTPGetResponse"));
 
+            lua.RegisterFunction("Execute", null, typeof(LuaApi).GetMethod("Execute"));
+
+            lua.RegisterFunction("MySQLSet", null, typeof(LuaApi).GetMethod("MySQLSet"));
+
             //POST 请求与获取结果
             lua.RegisterFunction("apiBase64File", null, typeof(LuaApi).GetMethod("Base64File"));
             //获取在线文件的base64结果
