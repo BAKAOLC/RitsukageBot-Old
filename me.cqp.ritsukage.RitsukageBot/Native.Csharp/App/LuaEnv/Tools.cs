@@ -135,6 +135,7 @@ namespace Native.Csharp.App.LuaEnv
         ///  </summary>
         ///  <param name="str_HardDiskName">只需输入代表驱动器的字母即可 </param>
         ///  <returns> </returns>
+        [LuaAPIFunction("apiGetHardDiskFreeSpace")]
         public static long GetHardDiskFreeSpace(string str_HardDiskName)
         {
             long freeSpace = new long();
@@ -192,6 +193,7 @@ namespace Native.Csharp.App.LuaEnv
         /// </summary>
         /// <param name="password">待加密的字符串</param>
         /// <returns></returns>
+        [LuaAPIFunction("apiMD5Encrypt")]
         public static string MD5Encrypt(string password)
         {
             MD5CryptoServiceProvider md5Hasher = new MD5CryptoServiceProvider();

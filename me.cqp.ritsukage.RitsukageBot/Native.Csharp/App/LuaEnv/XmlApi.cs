@@ -14,6 +14,7 @@ namespace Native.Csharp.App.LuaEnv
 
         public static string path = Common.AppDirectory + "xml/";
 
+        [LuaAPIFunction("apiXmlSet")]
         public static void set(string group, string msg, string str)
         {
             del(group, msg);
@@ -26,6 +27,7 @@ namespace Native.Csharp.App.LuaEnv
         /// <param name="group"></param>
         /// <param name="msg"></param>
         /// <returns></returns>
+        [LuaAPIFunction("apiXmlReplayGet")]
         public static string replay_get(string group, string msg)
         {
             dircheck(group);
@@ -45,6 +47,7 @@ namespace Native.Csharp.App.LuaEnv
             return ansall;
         }
 
+        [LuaAPIFunction("apiXmlGet")]
         public static string xml_get(string group, string msg)
         {
             dircheck(group);
@@ -58,6 +61,7 @@ namespace Native.Csharp.App.LuaEnv
             return ansall;
         }
 
+        [LuaAPIFunction("apiXmlRow")]
         public static string xml_row(string group, string msg)
         {
             dircheck(group);
@@ -71,6 +75,7 @@ namespace Native.Csharp.App.LuaEnv
             return ansall;
         }
 
+        [LuaAPIFunction("apiXmlListGet")]
         public static string list_get(string group, string msg)
         {
             dircheck(group);
@@ -86,6 +91,7 @@ namespace Native.Csharp.App.LuaEnv
             return ansall;
         }
 
+        [LuaAPIFunction("apiXmlDelete")]
         public static void del(string group, string msg)
         {
             dircheck(group);
@@ -100,6 +106,7 @@ namespace Native.Csharp.App.LuaEnv
             root.Save(path + group + ".xml");
         }
 
+        [LuaAPIFunction("apiXmlRemove")]
         public static void remove(string group, string msg, string ans)
         {
             dircheck(group);
@@ -115,6 +122,7 @@ namespace Native.Csharp.App.LuaEnv
         }
 
 
+        [LuaAPIFunction("apiXmlInsert")]
         public static void insert(string group, string msg, string ans)
         {
             if (msg.IndexOf("\r\n") < 0 & msg != "")
