@@ -22,6 +22,7 @@ namespace Native.Csharp.App.LuaEnv
         /// <param name="width">宽度</param>
         /// <param name="length">高度</param>
         /// <returns>图片对象</returns>
+        [LuaAPIFunction("apiGetBitmap")]
         public static Bitmap GetBitmap(int width, int length)
         {
             Bitmap bmp = new Bitmap(width, length);
@@ -41,6 +42,7 @@ namespace Native.Csharp.App.LuaEnv
         /// <param name="g">g</param>
         /// <param name="b">b</param>
         /// <returns>图片对象</returns>
+        [LuaAPIFunction("apiPutText")]
         public static Bitmap PutText(Bitmap bmp, int x, int y, string text, string type = "宋体", int size = 9,
             int r = 0, int g = 0, int b = 0)
         {
@@ -65,6 +67,7 @@ namespace Native.Csharp.App.LuaEnv
         /// <param name="g">g</param>
         /// <param name="b">b</param>
         /// <returns>图片对象</returns>
+        [LuaAPIFunction("apiPutBlock")]
         public static Bitmap PutBlock(Bitmap bmp, int x, int y, int xx, int yy,
             int r = 0, int g = 0, int b = 0)
         {
@@ -90,6 +93,7 @@ namespace Native.Csharp.App.LuaEnv
         /// <param name="xx">摆放图片宽度</param>
         /// <param name="yy">摆放图片高度</param>
         /// <returns>图片对象</returns>
+        [LuaAPIFunction("apiSetImage")]
         public static Bitmap SetImage(Bitmap bmp, int x, int y, string path, int xx = 0, int yy = 0)
         {
             if (!File.Exists(path))
@@ -108,6 +112,7 @@ namespace Native.Csharp.App.LuaEnv
         /// </summary>
         /// <param name="bmp">图片对象</param>
         /// <returns>图片路径</returns>
+        [LuaAPIFunction("apiGetDir")]
         public static string GetDir(Bitmap bmp)
         {
             string result = Tools.GetRandomString(32, true, false, false, false, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
@@ -120,6 +125,7 @@ namespace Native.Csharp.App.LuaEnv
         /// 获取程序运行目录
         /// </summary>
         /// <returns>主程序运行目录</returns>
+        [LuaAPIFunction("apiGetPath")]
         public static string GetPath()
         {
             return AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
@@ -130,6 +136,7 @@ namespace Native.Csharp.App.LuaEnv
         /// </summary>
         /// <param name="image">图片字符串，如“[CQ:image,file=123123]”</param>
         /// <returns>网址</returns>
+        [LuaAPIFunction("apiGetImagePath")]
         public static string GetImagePath(string image)
         {
             string fileName = Tools.Reg_get(image, "\\[CQ:image,file=(?<name>.*?)\\]", "name");//获取文件
@@ -147,6 +154,7 @@ namespace Native.Csharp.App.LuaEnv
         /// <param name="timeout">超时时间</param>
         /// <param name="referer">发起页面</param>
         /// <returns>下载结果</returns>
+        [LuaAPIFunction("apiHttpDownload")]
         public static bool HttpDownload(string Url, string fileName, int timeout = 5000, string referer = "")
         {
             //fileName = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "data/" + fileName;
@@ -186,6 +194,7 @@ namespace Native.Csharp.App.LuaEnv
         /// <summary>
         /// GET 请求与获取结果
         /// </summary>
+        [LuaAPIFunction("apiHttpGet")]
         public static string HttpGet(string Url, string postDataStr = "", int timeout = 5000,
             string cookie = "", string referer = "")
         {
@@ -236,6 +245,7 @@ namespace Native.Csharp.App.LuaEnv
         /// <summary>
         /// POST请求与获取结果
         /// </summary>
+        [LuaAPIFunction("apiHttpPost")]
         public static string HttpPost(string Url, string postDataStr, int timeout = 5000,
             string cookie = "", string contentType = "application/x-www-form-urlencoded", string referer = "")
         {
@@ -286,6 +296,7 @@ namespace Native.Csharp.App.LuaEnv
         /// <summary>
         /// 网络请求
         /// </summary>
+        [LuaAPIFunction]
         public static HttpWebRequest OHTTPCreateRequest(string Url, string postDataStr = "")
         {
             //请求前设置一下使用的安全协议类型 System.Net
@@ -307,6 +318,7 @@ namespace Native.Csharp.App.LuaEnv
             return request;
         }
 
+        [LuaAPIFunction]
         public static bool OHTTPSetMethod(HttpWebRequest request, string method = "")
         {
             if (method != "")
@@ -317,6 +329,7 @@ namespace Native.Csharp.App.LuaEnv
             return false;
         }
 
+        [LuaAPIFunction]
         public static bool OHTTPSetTimeout(HttpWebRequest request, int timeout = 5000)
         {
             if (timeout > 0)
@@ -327,6 +340,7 @@ namespace Native.Csharp.App.LuaEnv
             return false;
         }
 
+        [LuaAPIFunction]
         public static bool OHTTPContentType(HttpWebRequest request, string contentType = "")
         {
             if (contentType != "")
@@ -337,6 +351,7 @@ namespace Native.Csharp.App.LuaEnv
             return false;
         }
 
+        [LuaAPIFunction]
         public static bool OHTTPUserAgent(HttpWebRequest request, string userAgent = "")
         {
             if (userAgent != "")
@@ -347,6 +362,7 @@ namespace Native.Csharp.App.LuaEnv
             return false;
         }
 
+        [LuaAPIFunction]
         public static bool OHTTPSetCookie(HttpWebRequest request, string cookie = "")
         {
             if (cookie != "")
@@ -357,6 +373,7 @@ namespace Native.Csharp.App.LuaEnv
             return false;
         }
 
+        [LuaAPIFunction]
         public static bool OHTTPSetReferer(HttpWebRequest request, string referer = "")
         {
             if (referer != "")
@@ -380,6 +397,7 @@ namespace Native.Csharp.App.LuaEnv
             return true;
         }
 
+        [LuaAPIFunction]
         public static string OHTTPGetResponse(HttpWebRequest request)
         {
             try
@@ -413,6 +431,7 @@ namespace Native.Csharp.App.LuaEnv
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
+        [LuaAPIFunction("apiBase64File")]
         public static string Base64File(string path)
         {
             try
@@ -438,6 +457,7 @@ namespace Native.Csharp.App.LuaEnv
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
+        [LuaAPIFunction("apiGetPictureWidth")]
         public static int GetPictureWidth(string path)
         {
             try
@@ -456,6 +476,7 @@ namespace Native.Csharp.App.LuaEnv
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
+        [LuaAPIFunction("apiGetPictureHeight")]
         public static int GetPictureHeight(string path)
         {
             try
@@ -475,6 +496,7 @@ namespace Native.Csharp.App.LuaEnv
         /// </summary>
         /// <param name="n"></param>
         /// <param name="d"></param>
+        [LuaAPIFunction("apiSetVar")]
         public static void SetVar(string n, string d)
         {
             luaTemp[n] = d;
@@ -484,6 +506,7 @@ namespace Native.Csharp.App.LuaEnv
         /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
+        [LuaAPIFunction("apiGetVar")]
         public static string GetVar(string n)
         {
             if (luaTemp.ContainsKey(n))
@@ -496,6 +519,7 @@ namespace Native.Csharp.App.LuaEnv
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
+        [LuaAPIFunction("apiGetAsciiHex")]
         public static string GetAsciiHex(string str)
         {
             return BitConverter.ToString(Encoding.Default.GetBytes(str)).Replace("-", "");
@@ -505,8 +529,10 @@ namespace Native.Csharp.App.LuaEnv
         /// 设置定时脚本运行间隔时间
         /// </summary>
         /// <param name="wait"></param>
+        [LuaAPIFunction("apiSetTimerScriptWait")]
         public static void SetTimerScriptWait(int wait) => TimerRun.luaWait = wait;
 
+        [LuaAPIFunction]
         public static string Execute(string shell)
         {
             string rText = "";
@@ -552,26 +578,31 @@ namespace Native.Csharp.App.LuaEnv
         /// <summary>
         /// MySQL
         /// </summary>
+        [LuaAPIFunction]
         public static string SetMySQL(string host, int post, string username, string password, string database)
         {
             return MySQLHelper.Set(host, post, username, password, database);
         }
 
+        [LuaAPIFunction]
         public static string ConnectMySQL()
         {
             return MySQLHelper.Connect();
         }
 
+        [LuaAPIFunction]
         public static string DisconnectMySQL()
         {
             return MySQLHelper.Disconnect();
         }
 
+        [LuaAPIFunction]
         public static string MySQLDoCommand(string command)
         {
             return MySQLHelper.DoSQLCommand(command);
         }
 
+        [LuaAPIFunction]
         public static MySqlDataReader GetMySQLLastDataReader()
         {
             return MySQLHelper.GetLastDataReader();
@@ -684,50 +715,73 @@ namespace Native.Csharp.App.LuaEnv
             return reader.GetString(column);
         }
 
+        [LuaAPIFunction("cqCode_At")] 
         public static string CqCode_At(long qq) => Common.CqApi.CqCode_At(qq);
         //获取酷Q "At某人" 代码
+        [LuaAPIFunction("cqCqCode_Emoji")] 
         public static string CqCode_Emoji(int id) => Common.CqApi.CqCode_Emoji(id);
         //获取酷Q "emoji表情" 代码
+        [LuaAPIFunction("cqCqCode_Face")] 
         public static string CqCode_Face(int id) => Common.CqApi.CqCode_Face((Face)id);
         //获取酷Q "表情" 代码
+        [LuaAPIFunction("cqCqCode_Shake")] 
         public static string CqCode_Shake() => Common.CqApi.CqCode_Shake();
         //获取酷Q "窗口抖动" 代码
+        [LuaAPIFunction("cqCqCode_Trope")] 
         public static string CqCode_Trope(string str) => Common.CqApi.CqCode_Trope(str);
         //获取字符串的转义形式
+        [LuaAPIFunction("cqCqCode_UnTrope")] 
         public static string CqCode_UnTrope(string str) => Common.CqApi.CqCode_UnTrope(str);
         //获取字符串的非转义形式
+        [LuaAPIFunction("cqCqCode_ShareLink")] 
         public static string CqCode_ShareLink(string url, string title, string content, string imgUrl) => Common.CqApi.CqCode_ShareLink(url, title, content, imgUrl);
         //获取酷Q "链接分享" 代码
+        [LuaAPIFunction("cqCqCode_ShareCard")] 
         public static string CqCode_ShareCard(string cardType, long id) => Common.CqApi.CqCode_ShareCard(cardType, id);
         //获取酷Q "名片分享" 代码
+        [LuaAPIFunction("cqCqCode_ShareGPS")] 
         public static string CqCode_ShareGPS(string site, string detail, double lat, double lon, int zoom) => Common.CqApi.CqCode_ShareGPS(site, detail, lat, lon, zoom);
         //获取酷Q "位置分享" 代码
+        [LuaAPIFunction("cqCqCode_Anonymous")] 
         public static string CqCode_Anonymous(bool forced) => Common.CqApi.CqCode_Anonymous(forced);
         //获取酷Q "匿名" 代码
+        [LuaAPIFunction("cqCqCode_Image")] 
         public static string CqCode_Image(string path) => Common.CqApi.CqCode_Image(path);
         //获取酷Q "图片" 代码
+        [LuaAPIFunction("cqCqCode_Music")]
         public static string CqCode_Music(long id, string type, bool newStyle) => Common.CqApi.CqCode_Music(id, type, newStyle);
         //获取酷Q "音乐" 代码
+        [LuaAPIFunction("cqCqCode_MusciDIY")] 
         public static string CqCode_MusciDIY(string url, string musicUrl, string title, string content, string imgUrl) => Common.CqApi.CqCode_MusciDIY(url, musicUrl, title, content, imgUrl);
         //获取酷Q "音乐自定义" 代码
+        [LuaAPIFunction("cqCqCode_Record")] 
         public static string CqCode_Record(string path) => Common.CqApi.CqCode_Record(path);
         //获取酷Q "语音" 代码
+        [LuaAPIFunction("cqSendGroupMessage")] 
         public static int SendGroupMessage(long groupId, string message) => Common.CqApi.SendGroupMessage(groupId, message);
         //发送群消息
+        [LuaAPIFunction("cqSendPrivateMessage")] 
         public static int SendPrivateMessage(long qqId, string message) => Common.CqApi.SendPrivateMessage(qqId, message);
         //发送私聊消息
+        [LuaAPIFunction("cqSendDiscussMessage")] 
         public static int SendDiscussMessage(long discussId, string message) => Common.CqApi.SendDiscussMessage(discussId, message);
         //发送讨论组消息
+        [LuaAPIFunction("cqSendPraise")] 
         public static int SendPraise(long qqId, int count) => Common.CqApi.SendPraise(qqId, count);
         //发送赞
+        [LuaAPIFunction("cqRepealMessage")] 
         public static int RepealMessage(int id) => Common.CqApi.RepealMessage(id);
         //撤回消息
+        [LuaAPIFunction("cqGetLoginQQ")] 
         public static long GetLoginQQ() => Common.CqApi.GetLoginQQ();
         //取登录QQ
+        [LuaAPIFunction("cqGetLoginNick")] 
         public static string GetLoginNick() => Common.CqApi.GetLoginNick();
         //获取当前登录QQ的昵称
+        [LuaAPIFunction("cqAppDirectory")] 
         public static string GetAppDirectory() => Common.AppDirectory;
         //取应用目录
+        [LuaAPIFunction("cqGetQQInfo")] 
         public static LuaTable GetQQInfo(LuaTable t, long q, bool a)
         {
             // 当地时区
@@ -742,6 +796,7 @@ namespace Native.Csharp.App.LuaEnv
             return t;
         }
         //获取用户信息
+        [LuaAPIFunction("cqGetMemberInfo")]
         public static LuaTable GetMemberInfo(LuaTable t, long g, long q, bool a)
         {
             // 当地时区
@@ -764,6 +819,7 @@ namespace Native.Csharp.App.LuaEnv
             return t;
         }
         //获取群成员信息
+        [LuaAPIFunction("cqGetGroupList")]
         public static LuaTable GetGroupList(LuaTable t)
         {
             List<Group> g;
@@ -778,6 +834,7 @@ namespace Native.Csharp.App.LuaEnv
             return t;
         }
         //获取群列表
+        [LuaAPIFunction("cqGetMemberList")]
         public static LuaTable GetMemberList(LuaTable t, long g)
         {
             // 当地时区
@@ -808,24 +865,34 @@ namespace Native.Csharp.App.LuaEnv
             return t;
         }
         //获取群成员列表
+        [LuaAPIFunction("cqAddLoger")]
         public static int AddLoger(int level, string type, string content) => Common.CqApi.AddLoger((LogerLevel)level, type, content);
         //添加日志
+        [LuaAPIFunction("cqAddFatalError")]
         public static int AddFatalError(string msg) => Common.CqApi.AddFatalError(msg);
         //添加致命错误提示
+        [LuaAPIFunction("cqSetGroupWholeBanSpeak")]
         public static int SetGroupWholeBanSpeak(long groupId, bool isOpen) => Common.CqApi.SetGroupWholeBanSpeak(groupId, isOpen);
         //置全群禁言
+        [LuaAPIFunction("cqSetFriendAddRequest")]
         public static int SetFriendAddRequest(string tag, int respond, string msg) => Common.CqApi.SetFriendAddRequest(tag, (ResponseType)respond, msg);
         //置好友添加请求
+        [LuaAPIFunction("cqSetGroupAddRequest")]
         public static int SetGroupAddRequest(string tag, int request, int respond, string msg) => Common.CqApi.SetGroupAddRequest(tag, (RequestType)request, (ResponseType)respond, msg);
         //置群添加请求
+        [LuaAPIFunction("cqSetGroupMemberNewCard")]
         public static int SetGroupMemberNewCard(long groupId, long qqId, string newNick) => Common.CqApi.SetGroupMemberNewCard(groupId, qqId, newNick);
         //置群成员名片
+        [LuaAPIFunction("cqSetGroupManager")]
         public static int SetGroupManager(long groupId, long qqId, bool isCalcel) => Common.CqApi.SetGroupManager(groupId, qqId, isCalcel);
         //置群管理员
+        [LuaAPIFunction("cqSetAnonymousStatus")]
         public static int SetAnonymousStatus(long groupId, bool isOpen) => Common.CqApi.SetAnonymousStatus(groupId, isOpen);
         //置群匿名设置
+        [LuaAPIFunction("cqSetGroupMemberRemove")]
         public static int SetGroupMemberRemove(long groupId, long qqId, bool notAccept) => Common.CqApi.SetGroupMemberRemove(groupId, qqId, notAccept);
         //置群员移除
+        [LuaAPIFunction("cqSetDiscussExit")]
         public static int SetDiscussExit(long discussId) => Common.CqApi.SetDiscussExit(discussId);
         //置讨论组退出
     }

@@ -150,6 +150,7 @@
     <Compile Include="App\Interface\IEvent_GroupMessage.cs" />
     <Compile Include="App\Interface\IEvent_OtherMessage.cs" />
     <Compile Include="App\Interface\IEvent_UserExpand.cs" />
+    <Compile Include="App\LuaEnv\LuaAPIFunctionAttribute.cs" />
     <Compile Include="App\LuaEnv\MySQL.cs" />
     <Compile Include="App\LuaEnv\LuaApi.cs" />
     <Compile Include="App\LuaEnv\LuaEnv.cs" />

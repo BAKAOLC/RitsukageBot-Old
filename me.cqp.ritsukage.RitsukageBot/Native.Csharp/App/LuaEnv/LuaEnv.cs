@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Reflection;
+using System.Linq;
 using Native.Csharp.Sdk.Cqp.Enum;
 using NLua;
 
@@ -27,17 +30,19 @@ namespace Native.Csharp.App.LuaEnv {
             }
         }
 
+        [LuaAPIFunction("cqSetGroupSpecialTitle")]
         public static int SetGroupSpecialTitle(long groupId, long qqId, string specialTitle, int time) {
             TimeSpan span = new TimeSpan(time / 60 / 60 / 24, time / 60 / 60 % 60, time / 60 % 60, time % 60);
             return Common.CqApi.SetGroupSpecialTitle(groupId, qqId, specialTitle, span);
         }
 
-
+        [LuaAPIFunction("cqSetGroupAnonymousBanSpeak")]
         public static int SetGroupAnonymousBanSpeak(long groupId, string anonymous, int time) {
             TimeSpan span = new TimeSpan(time / 60 / 60 / 24, time / 60 / 60 % 60, time / 60 % 60, time % 60);
             return Common.CqApi.SetGroupAnonymousBanSpeak(groupId, anonymous, span);
         }
 
+        [LuaAPIFunction("cqSetGroupBanSpeak")]
         public static int SetGroupBanSpeak(long groupId, long qqId, int time) {
             TimeSpan span = new TimeSpan(time / 60 / 60 / 24, time / 60 / 60 % 60, time / 60 % 60, time % 60);
             return Common.CqApi.SetGroupBanSpeak(groupId, qqId, span);
@@ -49,6 +54,43 @@ namespace Native.Csharp.App.LuaEnv {
         /// <param name="lua"></param>
         /// <returns></returns>
         public static void Initial(Lua lua) {
+            //API查询遍历的类型列表
+            //（可改写为从程序集检索，暂不修改）
+            List<Type> searchTypes = new List<Type>
+            {
+                typeof(LuaApi), 
+                typeof(LuaEnv), 
+                typeof(XmlApi), 
+                typeof(TcpServer), 
+                typeof(Tools) 
+            };
+            foreach(Type t in searchTypes)
+            {
+                //类型中查找所有静态方法
+                MethodInfo[] mis = t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+                foreach(MethodInfo mi in mis)
+                {
+                    //获取特性
+                    LuaAPIFunctionAttribute lapiattr = mi.GetCustomAttribute<LuaAPIFunctionAttribute>();
+                    if (lapiattr != null)
+                    {
+                        //获取自定义名称
+                        string s = lapiattr.Name;
+                        if (!string.IsNullOrEmpty(s))
+                        {
+                            lua.RegisterFunction(s, null, mi);
+                        }
+                        else
+                        {
+                            lua.RegisterFunction(mi.Name, null, mi);
+                        }
+                    }
+                }
+            }
+
+            #region oldRegister
+
+            /*
             ///////////////
             //酷q类的接口//
             //////////////
@@ -176,33 +218,33 @@ namespace Native.Csharp.App.LuaEnv {
             lua.RegisterFunction("DisconnectMySQL", null, typeof(LuaApi).GetMethod("DisconnectMySQL"));
             lua.RegisterFunction("MySQLDoCommand", null, typeof(LuaApi).GetMethod("MySQLDoCommand"));
             lua.RegisterFunction("GetMySQLLastDataReader", null, typeof(LuaApi).GetMethod("GetMySQLLastDataReader"));
-            /*
-            lua.RegisterFunction("MySQLDataReaderNextLine", null, typeof(LuaApi).GetMethod("MySQLDataReaderNextLine"));
-            lua.RegisterFunction("MySQLDataReaderCheckEmptyByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderCheckEmptyByColumn"));
-            lua.RegisterFunction("MySQLDataReaderGetNameByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetNameByColumn"));
-            lua.RegisterFunction("MySQLDataReaderGetBooleanByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetBooleanByName"));
-            lua.RegisterFunction("MySQLDataReaderGetBooleanByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetBooleanByColumn"));
-            lua.RegisterFunction("MySQLDataReaderGetByteByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetByteByName"));
-            lua.RegisterFunction("MySQLDataReaderGetByteByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetByteByColumn"));
-            lua.RegisterFunction("MySQLDataReaderGetCharByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetCharByName"));
-            lua.RegisterFunction("MySQLDataReaderGetCharByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetCharByColumn"));
-            lua.RegisterFunction("MySQLDataReaderGetInt16ByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetInt16ByName"));
-            lua.RegisterFunction("MySQLDataReaderGetInt16ByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetInt16ByColumn"));
-            lua.RegisterFunction("MySQLDataReaderGetInt32ByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetInt32ByName"));
-            lua.RegisterFunction("MySQLDataReaderGetInt32ByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetInt32ByColumn"));
-            lua.RegisterFunction("MySQLDataReaderGetInt64ByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetInt64ByName"));
-            lua.RegisterFunction("MySQLDataReaderGetInt64ByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetInt64ByColumn"));
+            
+            //lua.RegisterFunction("MySQLDataReaderNextLine", null, typeof(LuaApi).GetMethod("MySQLDataReaderNextLine"));
+            //lua.RegisterFunction("MySQLDataReaderCheckEmptyByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderCheckEmptyByColumn"));
+            //lua.RegisterFunction("MySQLDataReaderGetNameByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetNameByColumn"));
+            //lua.RegisterFunction("MySQLDataReaderGetBooleanByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetBooleanByName"));
+            //lua.RegisterFunction("MySQLDataReaderGetBooleanByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetBooleanByColumn"));
+            //lua.RegisterFunction("MySQLDataReaderGetByteByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetByteByName"));
+            //lua.RegisterFunction("MySQLDataReaderGetByteByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetByteByColumn"));
+            //lua.RegisterFunction("MySQLDataReaderGetCharByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetCharByName"));
+            //lua.RegisterFunction("MySQLDataReaderGetCharByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetCharByColumn"));
+            //lua.RegisterFunction("MySQLDataReaderGetInt16ByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetInt16ByName"));
+            //lua.RegisterFunction("MySQLDataReaderGetInt16ByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetInt16ByColumn"));
+            //lua.RegisterFunction("MySQLDataReaderGetInt32ByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetInt32ByName"));
+            //lua.RegisterFunction("MySQLDataReaderGetInt32ByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetInt32ByColumn"));
+            //lua.RegisterFunction("MySQLDataReaderGetInt64ByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetInt64ByName"));
+            //lua.RegisterFunction("MySQLDataReaderGetInt64ByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetInt64ByColumn"));
             //lua.RegisterFunction("MySQLDataReaderGetUInt16ByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetUInt16ByName"));
             //lua.RegisterFunction("MySQLDataReaderGetUInt16ByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetUInt16ByColumn"));
             //lua.RegisterFunction("MySQLDataReaderGetUInt32ByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetUInt32ByName"));
             //lua.RegisterFunction("MySQLDataReaderGetUInt32ByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetUInt32ByColumn"));
             //lua.RegisterFunction("MySQLDataReaderGetUInt64ByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetUInt64ByName"));
             //lua.RegisterFunction("MySQLDataReaderGetUInt64ByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetUInt64ByColumn"));
-            lua.RegisterFunction("MySQLDataReaderGetDateTimeByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetDateTimeByName"));
-            lua.RegisterFunction("MySQLDataReaderGetDateTimeByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetDateTimeByColumn"));
-            lua.RegisterFunction("MySQLDataReaderGetStringByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetStringByName"));
-            lua.RegisterFunction("MySQLDataReaderGetStringByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetStringByColumn"));
-            */
+            //lua.RegisterFunction("MySQLDataReaderGetDateTimeByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetDateTimeByName"));
+            //lua.RegisterFunction("MySQLDataReaderGetDateTimeByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetDateTimeByColumn"));
+            //lua.RegisterFunction("MySQLDataReaderGetStringByName", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetStringByName"));
+            //lua.RegisterFunction("MySQLDataReaderGetStringByColumn", null, typeof(LuaApi).GetMethod("MySQLDataReaderGetStringByColumn"));
+            
 
             //POST 请求与获取结果
             lua.RegisterFunction("apiBase64File", null, typeof(LuaApi).GetMethod("Base64File"));
@@ -250,6 +292,9 @@ namespace Native.Csharp.App.LuaEnv {
             //获取某条的结果
             lua.RegisterFunction("apiXmlRow", null, typeof(XmlApi).GetMethod("xml_row"));
             //按结果查源头（反查）
+            */
+
+            #endregion
 
             lua.DoFile(Common.AppDirectory + "lua/require/head.lua");
 
@@ -301,6 +346,7 @@ namespace Native.Csharp.App.LuaEnv {
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
+        [LuaAPIFunction("apiSandBox")]
         public static string RunSandBox(string code) {
             using (var lua = new Lua()) {
                 lock (luaLock) {

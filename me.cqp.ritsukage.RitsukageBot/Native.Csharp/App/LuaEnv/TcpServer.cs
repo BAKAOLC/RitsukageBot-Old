@@ -52,6 +52,7 @@ namespace Native.Csharp.App.LuaEnv
             });
         }
 
+        [LuaAPIFunction("apiTcpSend")]
         public static void Send(string msg)
         {
             try
