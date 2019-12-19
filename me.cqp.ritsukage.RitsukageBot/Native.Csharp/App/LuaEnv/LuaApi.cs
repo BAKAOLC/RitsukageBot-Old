@@ -284,6 +284,7 @@ namespace Native.Csharp.App.LuaEnv
                 }
                 StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.GetEncoding(encoding));
                 string retString = reader.ReadToEnd();
+                reader.Close();
                 return retString;
             }
             catch (Exception e)

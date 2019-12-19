@@ -9,6 +9,7 @@ using Native.Csharp.Sdk.Cqp.Enum;
 using NLua;
 using System.Net;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace Native.Csharp.App.LuaEnv {
     class LuaEnv {
@@ -153,14 +154,29 @@ namespace Native.Csharp.App.LuaEnv {
             }
         }
 
-        private static void UploadAsyncResult(int taskID, string retString = "")
+        private static void UploadAsyncResult(long taskID, string retString = "")
         {
+            try
+            {
+                using (var lua = new Lua())
+                {
+                    lua.State.Encoding = Encoding.UTF8;
+                    var Func = lua.GetFunction("string.format");
+                    var refValue = Func.Call("%q", retString.Replace("\r", ""));
+                    retString = refValue[0].ToString();
+                }
+            }
+            catch (Exception e)
+            {
+                Common.CqApi.AddLoger(LogerLevel.Error, "Error", e.ToString());
+            }
+
             MySQLHelper.Disconnect();
             try
             {
                 MySQLHelper.Connect();
                 var msg = MySQLHelper.DoSQLCommand("INSERT INTO 异步任务池 ( taskID, finish, result ) VALUES ( "
-                    + taskID + ", 1, '" + retString + "'"
+                    + taskID + ", 1, " + retString
                     + " ) ON DUPLICATE KEY UPDATE finish = VALUES(finish), result = VALUES(result);");
                 if (msg != "success")
                 {
@@ -173,13 +189,13 @@ namespace Native.Csharp.App.LuaEnv {
             }
             MySQLHelper.Disconnect();
         }
-        
+
         [LuaAPIFunction]
-        public static bool AsyncHttpGet(int taskID, string Url,
+        public static bool AsyncHttpGet(long taskID, string Url,
             string postDataStr = "", int timeout = 5000,
             string cookie = "", string referer = "")
         {
-            
+
             void Response(IAsyncResult asynchronousResult)
             {
                 var request = (HttpWebRequest)asynchronousResult.AsyncState;
@@ -232,5 +248,108 @@ namespace Native.Csharp.App.LuaEnv {
             return true;
         }
 
+        [LuaAPIFunction]
+        public static bool AsyncHttpPost(long taskID, string Url, string postDataStr,
+            int timeout = 5000, string cookie = "",
+            string contentType = "application/x-www-form-urlencoded", string referer = "")
+        {
+            
+            void Response(IAsyncResult asynchronousResult)
+            {
+                var request = (HttpWebRequest)asynchronousResult.AsyncState;
+                var response = (HttpWebResponse)request.EndGetResponse(asynchronousResult);
+                string encoding = response.ContentEncoding;
+                if (encoding == null || encoding.Length < 1)
+                {
+                    encoding = "UTF-8"; //默认编码
+                }
+                StreamReader myStreamReader = new StreamReader(response.GetResponseStream(), Encoding.GetEncoding(encoding));
+
+                string retString = myStreamReader.ReadToEnd();
+                myStreamReader.Close();
+
+                UploadAsyncResult(taskID, retString);
+            }
+
+            try
+            {
+                //请求前设置一下使用的安全协议类型 System.Net
+                if (Url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
+                {
+                    ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, errors) =>
+                    {
+                        return true; //总是接受
+                    };
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+                }
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);
+                request.Method = "POST";
+                request.Timeout = timeout;
+                request.ContentType = contentType + "; charset=UTF-8";
+                byte[] byteResquest = Encoding.UTF8.GetBytes(postDataStr);
+                request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36 Vivaldi/2.2.1388.37";
+                if (cookie != "")
+                    request.Headers.Add("cookie", cookie);
+
+                if (referer != "")
+                    request.Referer = referer;
+
+                Stream stream = request.GetRequestStream();
+                stream.Write(byteResquest, 0, byteResquest.Length);
+                stream.Close();
+                request.BeginGetResponse(new AsyncCallback(Response), request);
+            }
+            catch (Exception e)
+            {
+                Common.CqApi.AddLoger(LogerLevel.Error, "post错误", e.ToString());
+                return false;
+            }
+
+            return true;
+        }
+
+        [LuaAPIFunction]
+        public static bool AsyncHttpDownload(long taskID, string Url, string fileName, int timeout = 5000, string referer = "")
+        {
+            void Response(IAsyncResult asynchronousResult)
+            {
+                var request = (HttpWebRequest)asynchronousResult.AsyncState;
+                var response = (HttpWebResponse)request.EndGetResponse(asynchronousResult);
+                if (response.ContentLength < 1024 * 1024 * 20)
+                {
+                    Tools.SaveBinaryFile(response, fileName);
+                }
+
+                UploadAsyncResult(taskID);
+            }
+
+            try
+            {
+                //请求前设置一下使用的安全协议类型 System.Net
+                if (Url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
+                {
+                    ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, errors) =>
+                    {
+                        return true; //总是接受
+                    };
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+                }
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);
+                request.ContentType = "text/html;charset=UTF-8";
+                request.Timeout = timeout;
+                request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36 Vivaldi/2.2.1388.37";
+
+                if (referer != "")
+                    request.Referer = referer;
+                
+                request.BeginGetResponse(new AsyncCallback(Response), request);
+            }
+            catch (Exception e)
+            {
+                Common.CqApi.AddLoger(LogerLevel.Error, "下载文件错误", e.ToString());
+                return false;
+            }
+            return true;
+        }
     }
 }
