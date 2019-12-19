@@ -198,21 +198,28 @@ namespace Native.Csharp.App.LuaEnv {
 
             void Response(IAsyncResult asynchronousResult)
             {
-                var request = (HttpWebRequest)asynchronousResult.AsyncState;
-                var response = (HttpWebResponse)request.EndGetResponse(asynchronousResult);
-                string encoding = response.ContentEncoding;
-                if (encoding == null || encoding.Length < 1)
+                try
                 {
-                    encoding = "UTF-8"; //默认编码
+                    var request = (HttpWebRequest)asynchronousResult.AsyncState;
+                    var response = (HttpWebResponse)request.EndGetResponse(asynchronousResult);
+                    string encoding = response.ContentEncoding;
+                    if (encoding == null || encoding.Length < 1)
+                    {
+                        encoding = "UTF-8"; //默认编码
+                    }
+                    Stream myResponseStream = response.GetResponseStream();
+                    StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding(encoding));
+
+                    string retString = myStreamReader.ReadToEnd();
+                    myStreamReader.Close();
+                    myResponseStream.Close();
+
+                    UploadAsyncResult(taskID, retString);
                 }
-                Stream myResponseStream = response.GetResponseStream();
-                StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding(encoding));
-
-                string retString = myStreamReader.ReadToEnd();
-                myStreamReader.Close();
-                myResponseStream.Close();
-
-                UploadAsyncResult(taskID, retString);
+                catch (Exception e)
+                {
+                    Common.CqApi.AddLoger(LogerLevel.Error, "get错误", e.ToString());
+                }
             }
 
             try
@@ -256,20 +263,27 @@ namespace Native.Csharp.App.LuaEnv {
             
             void Response(IAsyncResult asynchronousResult)
             {
-                var request = (HttpWebRequest)asynchronousResult.AsyncState;
-                var response = (HttpWebResponse)request.EndGetResponse(asynchronousResult);
-                string encoding = response.ContentEncoding;
-                if (encoding == null || encoding.Length < 1)
+                try
                 {
-                    encoding = "UTF-8"; //默认编码
+                    var request = (HttpWebRequest)asynchronousResult.AsyncState;
+                    var response = (HttpWebResponse)request.EndGetResponse(asynchronousResult);
+                    string encoding = response.ContentEncoding;
+                    if (encoding == null || encoding.Length < 1)
+                    {
+                        encoding = "UTF-8"; //默认编码
+                    }
+                    StreamReader myStreamReader = new StreamReader(response.GetResponseStream(), Encoding.GetEncoding(encoding));
+
+                    string retString = myStreamReader.ReadToEnd();
+                    myStreamReader.Close();
+
+                    UploadAsyncResult(taskID, retString);
                 }
-                StreamReader myStreamReader = new StreamReader(response.GetResponseStream(), Encoding.GetEncoding(encoding));
-
-                string retString = myStreamReader.ReadToEnd();
-                myStreamReader.Close();
-
-                UploadAsyncResult(taskID, retString);
-            }
+                catch (Exception e)
+                {
+                    Common.CqApi.AddLoger(LogerLevel.Error, "post错误", e.ToString());
+                }
+        }
 
             try
             {
@@ -313,14 +327,21 @@ namespace Native.Csharp.App.LuaEnv {
         {
             void Response(IAsyncResult asynchronousResult)
             {
-                var request = (HttpWebRequest)asynchronousResult.AsyncState;
-                var response = (HttpWebResponse)request.EndGetResponse(asynchronousResult);
-                if (response.ContentLength < 1024 * 1024 * 20)
+                try
                 {
-                    Tools.SaveBinaryFile(response, fileName);
-                }
+                    var request = (HttpWebRequest)asynchronousResult.AsyncState;
+                    var response = (HttpWebResponse)request.EndGetResponse(asynchronousResult);
+                    if (response.ContentLength < 1024 * 1024 * 20)
+                    {
+                        Tools.SaveBinaryFile(response, fileName);
+                    }
 
-                UploadAsyncResult(taskID);
+                    UploadAsyncResult(taskID);
+                }
+                catch (Exception e)
+                {
+                    Common.CqApi.AddLoger(LogerLevel.Error, "下载文件错误", e.ToString());
+                }
             }
 
             try
