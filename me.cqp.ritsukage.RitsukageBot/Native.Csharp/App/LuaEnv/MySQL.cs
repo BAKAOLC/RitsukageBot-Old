@@ -111,6 +111,23 @@ namespace Native.Csharp.App.LuaEnv
             return "success";
         }
 
+        public static string ExecuteSQLCommand(string command)
+        {
+            try
+            {
+                var c = new MySqlConnection(mConnStr);
+                c.Open();
+                MySqlCommand cmd = new MySqlCommand(command, c);
+                cmd.ExecuteNonQuery();
+                c.Close();
+            }
+            catch (Exception ex)
+            {
+                return "error: " + ex.ToString();
+            }
+            return "success";
+        }
+
         public static MySqlDataReader GetLastDataReader()
         {
             return lastDataReader;

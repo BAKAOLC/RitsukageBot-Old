@@ -598,6 +598,12 @@ namespace Native.Csharp.App.LuaEnv
         }
 
         [LuaAPIFunction]
+        public static string ExecuteMySQLCommand(string command)
+        {
+            return MySQLHelper.ExecuteSQLCommand(command);
+        }
+
+        [LuaAPIFunction]
         public static string MySQLDoCommand(string command)
         {
             return MySQLHelper.DoSQLCommand(command);

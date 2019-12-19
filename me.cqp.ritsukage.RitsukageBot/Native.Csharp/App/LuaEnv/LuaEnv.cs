@@ -175,7 +175,7 @@ namespace Native.Csharp.App.LuaEnv {
             try
             {
                 MySQLHelper.Connect();
-                var msg = MySQLHelper.DoSQLCommand("INSERT INTO 异步任务池 ( taskID, finish, result ) VALUES ( "
+                var msg = MySQLHelper.ExecuteSQLCommand("INSERT INTO 异步任务池 ( taskID, finish, result ) VALUES ( "
                     + taskID + ", 1, " + retString
                     + " ) ON DUPLICATE KEY UPDATE finish = VALUES(finish), result = VALUES(result);");
                 if (msg != "success")
