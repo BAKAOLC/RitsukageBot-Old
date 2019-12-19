@@ -64,7 +64,7 @@ namespace Native.Csharp.App.LuaEnv
             {
                 mConnStr = "server=" + host + ";port=" + post +
                     ";user=" + username + ";password=" + password +
-                    ";database=" + database + ";Allow User Variables=True;CharSet=utf8";
+                    ";database=" + database + ";Allow User Variables=True;CharSet=utf8mb4";
             }
             catch (Exception ex)
             {
