@@ -32,11 +32,11 @@ namespace Native.Csharp.App.LuaEnv
             return mInstance;
         }
 
-        private static bool open()
+        private static bool Open()
         {
             try
             {
-                connection.Open();
+                if (connection != null) connection.Open();
             }
             catch
             {
@@ -45,7 +45,7 @@ namespace Native.Csharp.App.LuaEnv
             return true;
         }
 
-        private static bool close()
+        private static bool Close()
         {
             try
             {
@@ -78,7 +78,7 @@ namespace Native.Csharp.App.LuaEnv
             try
             {
                 connection = new MySqlConnection(mConnStr);
-                if (!open()) return "error: failed to connect mysql";
+                if (!Open()) return "error: failed to connect mysql";
             }
             catch
             {
@@ -89,7 +89,7 @@ namespace Native.Csharp.App.LuaEnv
 
         public static string Disconnect()
         {
-            if (!close()) return "error: failed to close mysql connection";
+            if (!Close()) return "error: failed to close mysql connection";
             connection = null;
             return "success";
         }
@@ -100,7 +100,6 @@ namespace Native.Csharp.App.LuaEnv
             {
                 MySqlCommand cmd = new MySqlCommand(command, connection);
                 lastDataReader = cmd.ExecuteReader();
-                cmd = null;
             }
             catch (Exception ex)
             {
@@ -113,17 +112,22 @@ namespace Native.Csharp.App.LuaEnv
 
         public static string ExecuteSQLCommand(string command)
         {
+            MySqlConnection c = null;
             try
             {
-                var c = new MySqlConnection(mConnStr);
+                c = new MySqlConnection(mConnStr);
                 c.Open();
                 MySqlCommand cmd = new MySqlCommand(command, c);
                 cmd.ExecuteNonQuery();
-                c.Close();
+                cmd.Dispose();
             }
             catch (Exception ex)
             {
                 return "error: " + ex.ToString();
+            }
+            finally
+            {
+                c?.Close();
             }
             return "success";
         }
