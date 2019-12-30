@@ -54,7 +54,7 @@ namespace Native.Csharp.App.LuaEnv
             XElement root = XElement.Load(path + group + ".xml");
             string ansall = "";
             var element = from ee in root.Elements()
-                          where ee.Element(keyName)?.Value == msg
+                          where ee.Element(keyName).Value == msg
                           select ee;
             if (element.Count() > 0)
                 ansall = element.First().Element(valueName).Value;
@@ -68,7 +68,7 @@ namespace Native.Csharp.App.LuaEnv
             XElement root = XElement.Load(path + group + ".xml");
             string ansall = "";
             var element = from ee in root.Elements()
-                          where ee.Element(valueName)?.Value == msg
+                          where ee.Element(valueName).Value == msg
                           select ee;
             if (element.Count() > 0)
                 ansall = element.First().Element(keyName).Value;
@@ -82,11 +82,11 @@ namespace Native.Csharp.App.LuaEnv
             XElement root = XElement.Load(path + group + ".xml");
             string ansall = "";
             var element = from ee in root.Elements()
-                          where ee.Element(keyName)?.Value == msg
+                          where ee.Element(keyName).Value == msg
                           select ee;
             XElement[] result = element.ToArray();
             foreach (XElement mm in result)
-                ansall = ansall + mm.Element(valueName)?.Value + "\r\n";
+                ansall = ansall + mm.Element(valueName).Value + "\r\n";
             ansall = ansall + "一共有" + element.Count() + "条回复";
             return ansall;
         }
