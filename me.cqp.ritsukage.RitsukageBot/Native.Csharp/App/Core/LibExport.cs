@@ -3,10 +3,6 @@
  *	需要更新 AppID 请右击模板文件, 点击运行自定义工具
  */
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using Unity;
@@ -16,7 +12,6 @@ using Native.Csharp.App.Interface;
 using Native.Csharp.Sdk.Cqp;
 using Native.Csharp.Sdk.Cqp.Enum;
 using Native.Csharp.Tool;
-using Native.Csharp.Repair;
 
 namespace Native.Csharp.App.Core
 {
